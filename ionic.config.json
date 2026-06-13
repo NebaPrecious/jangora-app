@@ -1,0 +1,7 @@
+{
+  "name": "jangora-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
