@@ -1,13 +1,170 @@
-<ion-header [translucent]="true">
+<ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title>register</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/ai-introduction"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">register</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="register-page">
+
+  <div class="background-glow glow-top"></div>
+  <div class="background-glow glow-bottom"></div>
+
+  <div class="register-container">
+
+    <div class="brand-logo">
+
+      <img
+        src="assets/images/jangora-logo.png"
+        alt="Jangora Logo"
+        class="logo">
+
+    </div>
+
+    <div class="heading">
+
+      <h1>Welcome</h1>
+
+      <p>
+        Build smarter money habits.
+        One decision at a time.
+      </p>
+
+    </div>
+
+    <div class="form">
+
+      <div class="row">
+
+        <div class="input-box">
+
+          <label>First Name</label>
+
+          <ion-input
+            [(ngModel)]="firstName"
+            type="text">
+          </ion-input>
+
+        </div>
+
+        <div class="input-box">
+
+          <label>Last Name</label>
+
+          <ion-input
+            [(ngModel)]="lastName"
+            type="text">
+          </ion-input>
+
+        </div>
+
+      </div>
+
+      <div class="input-box">
+
+        <label>Email Address</label>
+
+        <ion-input
+          [(ngModel)]="email"
+          type="email">
+        </ion-input>
+
+      </div>
+
+      <div class="input-box">
+
+        <label>Password</label>
+
+        <div class="password-field">
+
+          <ion-input
+            [(ngModel)]="password"
+            [type]="showPassword ? 'text' : 'password'">
+          </ion-input>
+
+          <ion-icon
+            [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
+            (click)="togglePassword()">
+          </ion-icon>
+
+        </div>
+
+      </div>
+
+      <div class="input-box">
+
+        <label>Confirm Password</label>
+
+        <div class="password-field">
+
+          <ion-input
+            [(ngModel)]="confirmPassword"
+            [type]="showConfirmPassword ? 'text' : 'password'">
+          </ion-input>
+
+          <ion-icon
+            [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'"
+            (click)="toggleConfirmPassword()">
+          </ion-icon>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <ion-button
+      expand="block"
+      class="register-button"
+      (click)="register()"
+      [disabled]="loading">
+
+      <ion-spinner
+        *ngIf="loading"
+        name="crescent">
+      </ion-spinner>
+
+      <span *ngIf="!loading">
+        Create Account
+      </span>
+
+    </ion-button>
+
+    <div class="divider">
+
+      <div></div>
+
+      <span>OR</span>
+
+      <div></div>
+
+    </div>
+
+    <ion-button
+      expand="block"
+      fill="outline"
+      class="google-button">
+
+      <ion-icon
+        slot="start"
+        name="logo-google">
+      </ion-icon>
+
+      Continue with Google
+
+    </ion-button>
+
+    <div class="footer">
+
+      Already have an account?
+
+      <span (click)="login()">
+        Sign In
+      </span>
+
+    </div>
+
+  </div>
+
 </ion-content>

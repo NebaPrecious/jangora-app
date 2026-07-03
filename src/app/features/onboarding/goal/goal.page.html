@@ -1,0 +1,55 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/welcome"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="goal-page">
+
+  <div class="container">
+
+    <div class="progress-text">
+      Step 1 of 5
+    </div>
+
+    <ion-progress-bar
+      value="0.2"
+      color="success">
+    </ion-progress-bar>
+
+    <h1 class="title">
+      What are you trying to achieve?
+    </h1>
+
+    <p class="subtitle">
+      Select all goals that apply to you.
+    </p>
+
+    <div class="goal-list">
+
+      <div
+        class="goal-card"
+        *ngFor="let goal of goals"
+        [class.selected]="isSelected(goal)"
+        (click)="toggleGoal(goal)">
+        {{ goal }}
+      </div>
+
+    </div>
+
+  </div>
+
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-button
+      expand="block"
+      [disabled]="selectedGoals.length === 0"
+      (click)="continue()">
+      Continue
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,66 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/register"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="verify-page">
+
+  <div class="background"></div>
+
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+
+  <div class="container">
+
+    <div class="content">
+
+      <h1>Check your email</h1>
+
+      <p class="email">
+        {{ email }}
+      </p>
+
+      <p class="subtitle">
+        We've sent you a verification email.
+      </p>
+
+      <p
+        class="countdown"
+        *ngIf="countdown > 0">
+        Resend email in {{ countdown }}s
+      </p>
+
+      <ion-button
+        *ngIf="countdown > 0"
+        expand="block"
+        class="action-btn"
+        (click)="verifyEmail()"
+        [disabled]="isVerifying">
+
+        <ion-spinner
+          *ngIf="isVerifying"
+          name="crescent">
+        </ion-spinner>
+
+        <span *ngIf="!isVerifying">
+          Verify
+        </span>
+
+      </ion-button>
+
+      <ion-button
+        *ngIf="countdown === 0"
+        expand="block"
+        class="action-btn"
+        (click)="resendEmail()">
+        Resend Email
+      </ion-button>
+
+    </div>
+
+  </div>
+
+</ion-content>

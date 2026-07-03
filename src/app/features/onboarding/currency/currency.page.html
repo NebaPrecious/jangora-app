@@ -1,0 +1,66 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/goal"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="currency-page">
+
+  <div class="container">
+
+    <div class="progress-text">
+      Step 2 of 5
+    </div>
+
+    <ion-progress-bar
+      value="0.4"
+      color="success">
+    </ion-progress-bar>
+
+    <h1 class="title">
+      Which currency do you use most?
+    </h1>
+
+    <p class="subtitle">
+      This helps us personalize budgets and savings plans.
+    </p>
+
+    <ion-searchbar
+      placeholder="Search currency..."
+      [(ngModel)]="currencySearch"
+      (ionInput)="filterCurrencies()">
+    </ion-searchbar>
+
+    <div class="currency-list">
+
+      <div
+        class="currency-card"
+        *ngFor="let currency of filteredCurrencies"
+        [class.selected]="selectedCurrency === currency.code"
+        (click)="selectCurrency(currency.code)">
+
+        <div class="currency-info">
+          <strong>{{ currency.code }}</strong>
+          <span>{{ currency.name }}</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-button
+      expand="block"
+      [disabled]="!selectedCurrency"
+      (click)="continue()">
+      Continue
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

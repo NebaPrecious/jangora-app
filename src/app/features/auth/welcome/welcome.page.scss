@@ -1,0 +1,80 @@
+.welcome-page {
+  --background: #F5F8FA;
+}
+
+.welcome-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.content {
+  width: 100%;
+  max-width: 500px;
+
+  animation: fadeUp 0.8s ease;
+}
+
+.title {
+  font-size: 2.3rem;
+  font-weight: 800;
+  color: #1A3C5E;
+  margin-bottom: 12px;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #666666;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+.benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 50px;
+}
+
+.benefit {
+  background: white;
+  padding: 18px;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+
+  animation: slideIn 0.8s ease;
+}
+
+.get-started-btn {
+  --background: #1A3C5E;
+  --border-radius: 14px;
+  height: 54px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(35px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-25px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

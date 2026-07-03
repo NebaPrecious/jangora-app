@@ -1,0 +1,116 @@
+ion-header {
+  --background: transparent;
+}
+
+ion-toolbar {
+  --background: rgba(6, 20, 15, .55);
+  backdrop-filter: blur(14px);
+  --border-width: 0;
+}
+
+ion-back-button {
+  --color: #52B788;
+}
+
+.goal-page {
+  --background: linear-gradient(
+    180deg,
+    #06140F 0%,
+    #081C15 45%,
+    #0B2D22 100%
+  );
+}
+
+.container {
+  padding: 24px;
+  padding-bottom: 120px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.progress-text {
+  color: #95D5B2;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+ion-progress-bar {
+  margin-bottom: 30px;
+  height: 8px;
+  border-radius: 10px;
+}
+
+.title {
+  color: #FFFFFF;
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.subtitle {
+  color: rgba(255,255,255,.78);
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.goal-list {
+  padding-bottom: 20px;
+}
+
+.goal-card {
+  background: rgba(255,255,255,.08);
+  padding: 20px;
+  border-radius: 18px;
+  margin-bottom: 15px;
+  border: 1px solid rgba(255,255,255,.12);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(18px);
+  animation: slideUp .4s ease;
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.goal-card:hover {
+  transform: translateY(-2px);
+}
+
+.goal-card.selected {
+  background: rgba(82,183,136,.22);
+  color: #FFFFFF;
+  border-color: #52B788;
+  transform: scale(1.02);
+  box-shadow: 0 15px 35px rgba(82,183,136,.25);
+}
+
+ion-footer {
+  background: rgba(6,20,15,.88);
+  backdrop-filter: blur(16px);
+}
+
+ion-footer ion-toolbar {
+  --background: transparent;
+  --border-width: 0;
+  padding: 14px 24px 24px;
+}
+
+ion-footer ion-button {
+  height: 56px;
+  --background: linear-gradient(90deg, #40916C, #52B788);
+  --border-radius: 18px;
+  --color: #FFFFFF;
+  font-weight: 700;
+  --box-shadow: 0 15px 35px rgba(82,183,136,.3);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

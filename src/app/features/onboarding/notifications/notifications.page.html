@@ -1,0 +1,70 @@
+
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/income"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="notifications-page">
+
+  <div class="bg-circle circle1"></div>
+  <div class="bg-circle circle2"></div>
+  <div class="bg-circle circle3"></div>
+
+  <div class="container">
+
+    <div class="progress">
+
+      <span>Almost there...</span>
+
+      <ion-progress-bar
+        value="0.8"
+        color="success">
+      </ion-progress-bar>
+
+    </div>
+
+    <h1 class="title">
+      Stay in Control
+    </h1>
+
+    <p class="subtitle">
+      Choose how Jangora should help you build healthy financial habits.
+    </p>
+
+    <div class="notification-list">
+
+      <div
+        class="card"
+        *ngFor="let item of notifications"
+        [class.selected]="isSelected(item.title)"
+        (click)="toggle(item.title)">
+
+        <div class="icon">
+          <ion-icon [name]="item.icon"></ion-icon>
+        </div>
+
+        <div class="text">
+          <h2>{{ item.title }}</h2>
+          <p>{{ item.subtitle }}</p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-button
+      expand="block"
+      (click)="continue()">
+      Continue
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,81 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/notifications"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ai-page">
+
+  <div class="bg-circle circle1"></div>
+  <div class="bg-circle circle2"></div>
+  <div class="bg-circle circle3"></div>
+
+  <div class="container">
+
+    <div class="progress">
+
+      <span>Final Step</span>
+
+      <ion-progress-bar
+        value="1"
+        color="success">
+      </ion-progress-bar>
+
+    </div>
+
+    <div class="ai-core">
+
+      <div class="pulse"></div>
+
+      <div class="ring ring1"></div>
+      <div class="ring ring2"></div>
+      <div class="ring ring3"></div>
+      <div class="ring ring4"></div>
+
+      <div class="center-core"></div>
+
+    </div>
+
+    <h1 class="title">
+      Meet Your AI Coach
+    </h1>
+
+    <p class="subtitle">
+      Smarter money decisions,
+      one conversation at a time.
+    </p>
+
+    <div class="divider"></div>
+
+    <div class="feature delay1">
+      <span>✨</span>
+      <p>Learns your habits</p>
+    </div>
+
+    <div class="feature delay2">
+      <span>💰</span>
+      <p>Helps you save smarter</p>
+    </div>
+
+    <div class="feature delay3">
+      <span>🎯</span>
+      <p>Keeps you on track</p>
+    </div>
+
+  </div>
+
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-button
+      expand="block"
+      class="continue-btn"
+      [disabled]="loading"
+      (click)="continue()">
+      {{ loading ? 'Preparing Jangora...' : 'Continue' }}
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>
