@@ -1,0 +1,75 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" (click)="goBack()"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="profile-page">
+  <div class="glow glow-one"></div>
+  <div class="glow glow-two"></div>
+
+  <div class="profile-container">
+    <div class="profile-card">
+      <div class="avatar-badge">
+        <ion-icon name="person-outline"></ion-icon>
+      </div>
+
+      <h1>{{ userName }}</h1>
+      <p>{{ userEmail }}</p>
+
+      <div class="profile-summary">
+        <div>
+          <span>Currency</span>
+          <strong>{{ preferredCurrency }}</strong>
+        </div>
+        <div>
+          <span>Monthly income</span>
+          <strong>{{ formatMoney(monthlyIncome) }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="shortcut-card">
+      <button type="button" class="shortcut-item">
+        <div class="shortcut-icon">
+          <ion-icon name="notifications-outline"></ion-icon>
+        </div>
+        <div class="shortcut-label">
+          <strong>Notification preferences</strong>
+          <span>Manage reminders and alerts</span>
+        </div>
+        <ion-icon class="chevron" name="chevron-forward-outline"></ion-icon>
+      </button>
+
+      <button type="button" class="shortcut-item">
+        <div class="shortcut-icon">
+          <ion-icon name="lock-closed-outline"></ion-icon>
+        </div>
+        <div class="shortcut-label">
+          <strong>Change password</strong>
+          <span>Update your account security</span>
+        </div>
+        <ion-icon class="chevron" name="chevron-forward-outline"></ion-icon>
+      </button>
+
+      <button type="button" class="shortcut-item">
+        <div class="shortcut-icon">
+          <ion-icon name="settings-outline"></ion-icon>
+        </div>
+        <div class="shortcut-label">
+          <strong>App settings</strong>
+          <span>Currency, alerts, and preferences</span>
+        </div>
+        <ion-icon class="chevron" name="chevron-forward-outline"></ion-icon>
+      </button>
+    </div>
+
+    <button type="button" class="logout-btn" (click)="handleLogout()">
+      <ion-icon name="log-out-outline"></ion-icon>
+      <span>Logout</span>
+    </button>
+  </div>
+</ion-content>

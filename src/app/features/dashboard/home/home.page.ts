@@ -102,6 +102,10 @@ export class HomePage {
     void this.router.navigateByUrl(`/${tab}`);
   }
 
+  goToProfile(): void {
+    void this.router.navigateByUrl('/profile');
+  }
+
   handleQuickAction(action: string): void {
     switch (action) {
       case 'add-expense':

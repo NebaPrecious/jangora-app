@@ -145,4 +145,8 @@ export const routes: Routes = [
       },
     },
   },
+  {
+    path: 'profile',
+    loadComponent: () => import('./features/settings/profile/profile.page').then( m => m.ProfilePage)
+  },
 ];

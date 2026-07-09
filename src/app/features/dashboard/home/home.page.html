@@ -12,8 +12,14 @@
         <h1>{{ userName }}</h1>
       </div>
 
-      <div class="notification-btn">
-        <ion-icon name="notifications-outline"></ion-icon>
+      <div class="top-actions">
+        <button type="button" class="profile-btn" (click)="goToProfile()">
+          <span>P</span>
+        </button>
+
+        <button type="button" class="notification-btn">
+          <ion-icon name="notifications-outline"></ion-icon>
+        </button>
       </div>
 
     </div>
