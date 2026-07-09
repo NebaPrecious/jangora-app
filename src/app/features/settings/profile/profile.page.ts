@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { IonBackButton, IonButtons, IonContent, IonHeader, IonIcon, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { AuthService } from '../../../core/auth/auth.service';
 import { addIcons } from 'ionicons';
 import {
   cashOutline,
@@ -23,6 +24,7 @@ import {
 })
 export class ProfilePage implements OnInit {
   private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
 
   userName = 'Precious';
   userEmail = 'precious@example.com';
@@ -43,6 +45,9 @@ export class ProfilePage implements OnInit {
   }
 
   ngOnInit(): void {
+    const currentUser = this.authService.getCurrentUser();
+    this.userName = currentUser?.displayName || 'Precious';
+    this.userEmail = currentUser?.email || this.userEmail;
   }
 
   goBack(): void {
@@ -53,8 +58,10 @@ export class ProfilePage implements OnInit {
     return `${this.preferredCurrency} ${amount.toLocaleString()}`;
   }
 
-  handleLogout(): void {
-    return;
+  async handleLogout(): Promise<void> {
+    await this.authService.logout();
+    localStorage.removeItem('registeredEmail');
+    void this.router.navigateByUrl('/login');
   }
 
 }

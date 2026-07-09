@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../core/auth/auth.service';
 
 import {
   IonContent,
@@ -54,11 +55,15 @@ export class RegisterPage {
   confirmPassword = '';
 
   loading = false;
+  errorMessage = '';
 
   showPassword = false;
   showConfirmPassword = false;
 
-  constructor(private router: Router) {
+  constructor(
+    private readonly router: Router,
+    private readonly authService: AuthService,
+  ) {
     addIcons({
       personOutline,
       mailOutline,
@@ -78,15 +83,30 @@ export class RegisterPage {
   }
 
   async register() {
+    if (!this.email || !this.password || !this.confirmPassword) {
+      this.errorMessage = 'Please complete all fields to create your account.';
+      return;
+    }
+
+    if (this.password !== this.confirmPassword) {
+      this.errorMessage = 'Passwords do not match.';
+      return;
+    }
+
     this.loading = true;
+    this.errorMessage = '';
 
-    setTimeout(() => {
-      localStorage.setItem('registeredEmail', this.email);
-
-      this.loading = false;
-
+    try {
+      const credentials = await this.authService.register(this.email.trim(), this.password);
+      localStorage.setItem('registeredEmail', credentials.user.email || this.email.trim());
+      await this.authService.sendVerificationEmail();
       this.router.navigateByUrl('/verify-email');
-    }, 1800);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Unable to create your account right now.';
+      this.errorMessage = message.includes('auth/') ? 'We could not create your account. Please try again.' : message;
+    } finally {
+      this.loading = false;
+    }
   }
 
   login() {

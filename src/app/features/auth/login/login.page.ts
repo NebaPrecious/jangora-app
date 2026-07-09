@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../core/auth/auth.service';
 
 import {
   IonContent,
@@ -51,8 +52,12 @@ export class LoginPage {
 
   loading = false;
   showPassword = false;
+  errorMessage = '';
 
-  constructor(private router: Router) {
+  constructor(
+    private readonly router: Router,
+    private readonly authService: AuthService,
+  ) {
     addIcons({
       mailOutline,
       lockClosedOutline,
@@ -67,12 +72,29 @@ export class LoginPage {
   }
 
   async login() {
-    this.loading = true;
+    if (!this.email || !this.password) {
+      this.errorMessage = 'Please enter your email and password.';
+      return;
+    }
 
-    setTimeout(() => {
+    this.loading = true;
+    this.errorMessage = '';
+
+    try {
+      const credentials = await this.authService.login(this.email.trim(), this.password);
+      localStorage.setItem('registeredEmail', credentials.user.email || this.email.trim());
+
+      if (await this.authService.checkEmailVerified()) {
+        this.router.navigateByUrl('/dashboard');
+      } else {
+        this.router.navigateByUrl('/verify-email');
+      }
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Unable to sign in right now.';
+      this.errorMessage = message.includes('auth/') ? 'We could not sign you in. Please check your details and try again.' : message;
+    } finally {
       this.loading = false;
-      this.router.navigateByUrl('/dashboard');
-    }, 1800);
+    }
   }
 
   forgotPassword() {

@@ -114,6 +114,10 @@
 
     </div>
 
+    <p *ngIf="errorMessage" style="margin: 12px 0 0; color: #ff8a80; font-size: 13px; text-align: center;">
+      {{ errorMessage }}
+    </p>
+
     <ion-button
       expand="block"
       class="register-button"

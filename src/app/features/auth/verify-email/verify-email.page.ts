@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../core/auth/auth.service';
 
 import {
   IonContent,
@@ -35,12 +36,18 @@ export class VerifyEmailPage implements OnInit, OnDestroy {
   countdown = 45;
 
   isVerifying = false;
+  message = '';
+  errorMessage = '';
 
   private timer: any;
 
-  constructor(private router: Router) {}
+  constructor(
+    private readonly router: Router,
+    private readonly authService: AuthService,
+  ) {}
 
   ngOnInit(): void {
+    this.email = localStorage.getItem('registeredEmail') || this.authService.getCurrentUser()?.email || '';
     this.startCountdown();
   }
 
@@ -60,17 +67,38 @@ export class VerifyEmailPage implements OnInit, OnDestroy {
     }, 1000);
   }
 
-  verifyEmail() {
+  async verifyEmail() {
     this.isVerifying = true;
+    this.errorMessage = '';
+    this.message = '';
 
-    setTimeout(() => {
+    try {
+      const verified = await this.authService.checkEmailVerified();
+
+      if (verified) {
+        this.router.navigateByUrl('/dashboard');
+      } else {
+        this.errorMessage = 'Your email is still not verified. Please check your inbox or resend the link.';
+      }
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'We could not verify your email right now.';
+      this.errorMessage = message;
+    } finally {
       this.isVerifying = false;
-      this.router.navigateByUrl('/dashboard');
-    }, 2000);
+    }
   }
 
-  resendEmail() {
+  async resendEmail() {
     this.countdown = 45;
     this.startCountdown();
+
+    try {
+      await this.authService.sendVerificationEmail();
+      this.message = 'A fresh verification email has been sent.';
+      this.errorMessage = '';
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'We could not resend the verification email.';
+      this.errorMessage = message;
+    }
   }
 }

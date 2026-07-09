@@ -27,6 +27,14 @@
         We've sent you a verification email.
       </p>
 
+      <p *ngIf="message" style="margin: 8px 0 0; color: #52B788; font-size: 13px;">
+        {{ message }}
+      </p>
+
+      <p *ngIf="errorMessage" style="margin: 8px 0 0; color: #ff8a80; font-size: 13px;">
+        {{ errorMessage }}
+      </p>
+
       <p
         class="countdown"
         *ngIf="countdown > 0">

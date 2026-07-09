@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AuthGuard } from './core/auth/auth.guard';
 
 export const routes: Routes = [
   {
@@ -92,11 +93,18 @@ export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () => import('./features/dashboard/home/home.page').then((m) => m.HomePage),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'dashboard',
+    loadComponent: () => import('./features/dashboard/home/home.page').then((m) => m.HomePage),
+    canActivate: [AuthGuard],
   },
   {
     path: 'expenses',
     loadComponent: () =>
       import('./features/dashboard/section/section.page').then((m) => m.SectionPage),
+    canActivate: [AuthGuard],
     data: {
       section: {
         title: 'Expenses',
@@ -110,6 +118,7 @@ export const routes: Routes = [
     path: 'savings',
     loadComponent: () =>
       import('./features/dashboard/section/section.page').then((m) => m.SectionPage),
+    canActivate: [AuthGuard],
     data: {
       section: {
         title: 'Savings',
@@ -123,6 +132,7 @@ export const routes: Routes = [
     path: 'budget',
     loadComponent: () =>
       import('./features/dashboard/section/section.page').then((m) => m.SectionPage),
+    canActivate: [AuthGuard],
     data: {
       section: {
         title: 'Budget',
@@ -136,6 +146,7 @@ export const routes: Routes = [
     path: 'chat',
     loadComponent: () =>
       import('./features/dashboard/section/section.page').then((m) => m.SectionPage),
+    canActivate: [AuthGuard],
     data: {
       section: {
         title: 'Chat',
@@ -147,6 +158,7 @@ export const routes: Routes = [
   },
   {
     path: 'profile',
-    loadComponent: () => import('./features/settings/profile/profile.page').then( m => m.ProfilePage)
+    loadComponent: () => import('./features/settings/profile/profile.page').then( m => m.ProfilePage),
+    canActivate: [AuthGuard],
   },
 ];

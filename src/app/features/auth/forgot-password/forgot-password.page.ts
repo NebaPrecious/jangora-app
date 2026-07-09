@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../core/auth/auth.service';
 
 import {
   IonContent,
@@ -37,16 +38,32 @@ export class ForgotPasswordPage {
   email = '';
   loading = false;
   emailSent = false;
+  message = '';
 
-  constructor(private router: Router) {}
+  constructor(
+    private readonly router: Router,
+    private readonly authService: AuthService,
+  ) {}
 
-  sendResetLink() {
+  async sendResetLink() {
+    if (!this.email) {
+      this.message = 'Please enter your email.';
+      return;
+    }
+
     this.loading = true;
+    this.message = '';
 
-    setTimeout(() => {
-      this.loading = false;
+    try {
+      await this.authService.sendPasswordReset(this.email.trim());
       this.emailSent = true;
-    }, 1500);
+      this.message = 'A reset link has been sent to your email.';
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'We could not send a reset link right now.';
+      this.message = message.includes('auth/') ? 'We could not send a reset link. Please try again.' : message;
+    } finally {
+      this.loading = false;
+    }
   }
 
   backToLogin() {
