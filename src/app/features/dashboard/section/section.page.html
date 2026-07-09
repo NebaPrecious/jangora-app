@@ -1,0 +1,70 @@
+<ion-content [fullscreen]="true" class="dashboard-section-page">
+  <div class="glow glow-one"></div>
+  <div class="glow glow-two"></div>
+
+  <div class="section-container">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">Dashboard</p>
+        <h1>{{ sectionTitle }}</h1>
+        <p class="section-subtitle">{{ sectionDescription }}</p>
+      </div>
+
+      <div class="section-icon">
+        <ion-icon [name]="sectionIcon"></ion-icon>
+      </div>
+    </div>
+
+    <div class="quick-actions" *ngIf="showQuickActions">
+      <button
+        type="button"
+        class="quick-action"
+        *ngFor="let action of quickActions"
+        (click)="handleQuickAction(action.action)">
+        <div class="quick-icon">
+          <ion-icon [name]="action.icon"></ion-icon>
+        </div>
+        <span>{{ action.label }}</span>
+      </button>
+    </div>
+
+    <div class="section-card">
+      <div class="card-header">
+        <div>
+          <p>Focus for today</p>
+          <h2>Keep your money momentum steady</h2>
+        </div>
+        <div class="card-badge">
+          <ion-icon name="sparkles-outline"></ion-icon>
+        </div>
+      </div>
+
+      <div class="stat-row">
+        <div>
+          <span>Tracked this month</span>
+          <strong>12 entries</strong>
+        </div>
+        <div>
+          <span>Next milestone</span>
+          <strong>85% of goal</strong>
+        </div>
+      </div>
+
+      <ion-progress-bar value="0.85" color="success"></ion-progress-bar>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <button
+      type="button"
+      class="nav-item"
+      *ngFor="let tab of tabs"
+      [class.active]="activeTab === tab.id"
+      (click)="setTab(tab.id)">
+      <div class="nav-icon">
+        <ion-icon [name]="tab.icon"></ion-icon>
+      </div>
+      <span>{{ tab.label }}</span>
+    </button>
+  </div>
+</ion-content>

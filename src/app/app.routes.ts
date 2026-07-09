@@ -89,4 +89,60 @@ export const routes: Routes = [
     path: 'verify-email',
     loadComponent: () => import('./features/auth/verify-email/verify-email.page').then( m => m.VerifyEmailPage)
   },
+  {
+    path: 'home',
+    loadComponent: () => import('./features/dashboard/home/home.page').then((m) => m.HomePage),
+  },
+  {
+    path: 'expenses',
+    loadComponent: () =>
+      import('./features/dashboard/section/section.page').then((m) => m.SectionPage),
+    data: {
+      section: {
+        title: 'Expenses',
+        description: 'Your everyday spending stays in sync with your goals.',
+        icon: 'receipt-outline',
+        showQuickActions: true,
+      },
+    },
+  },
+  {
+    path: 'savings',
+    loadComponent: () =>
+      import('./features/dashboard/section/section.page').then((m) => m.SectionPage),
+    data: {
+      section: {
+        title: 'Savings',
+        description: 'Build your emergency and milestone funds with calm consistency.',
+        icon: 'wallet-outline',
+        showQuickActions: false,
+      },
+    },
+  },
+  {
+    path: 'budget',
+    loadComponent: () =>
+      import('./features/dashboard/section/section.page').then((m) => m.SectionPage),
+    data: {
+      section: {
+        title: 'Budget',
+        description: 'See the monthly plan and keep your spending on track.',
+        icon: 'pie-chart-outline',
+        showQuickActions: false,
+      },
+    },
+  },
+  {
+    path: 'chat',
+    loadComponent: () =>
+      import('./features/dashboard/section/section.page').then((m) => m.SectionPage),
+    data: {
+      section: {
+        title: 'Chat',
+        description: 'Ask Jangora for personalized money insights and nudges.',
+        icon: 'chatbubble-ellipses-outline',
+        showQuickActions: false,
+      },
+    },
+  },
 ];

@@ -1,0 +1,179 @@
+<ion-content [fullscreen]="true" class="home-page">
+
+  <div class="glow glow-one"></div>
+  <div class="glow glow-two"></div>
+
+  <div class="home-container">
+
+    <div class="top-bar">
+
+      <div>
+        <p class="hello">Good morning</p>
+        <h1>{{ userName }}</h1>
+      </div>
+
+      <div class="notification-btn">
+        <ion-icon name="notifications-outline"></ion-icon>
+      </div>
+
+    </div>
+
+    <div class="balance-card">
+
+      <div class="balance-top">
+        <p>Total Balance</p>
+        <span>Net Worth</span>
+      </div>
+
+      <h2>{{ formatMoney(totalBalance) }}</h2>
+
+      <p class="balance-note">
+        Your financial picture will grow as you track expenses and savings.
+      </p>
+
+    </div>
+
+    <div class="quick-actions">
+
+      <button
+        type="button"
+        class="quick-action"
+        *ngFor="let action of quickActions"
+        (click)="handleQuickAction(action.action)">
+        <div class="quick-icon">
+          <ion-icon [name]="action.icon"></ion-icon>
+        </div>
+        <span>{{ action.label }}</span>
+      </button>
+
+    </div>
+
+    <div class="month-card">
+
+      <div class="card-header">
+        <div>
+          <p>This Month</p>
+          <h3>Spending vs Budget</h3>
+        </div>
+
+        <ion-icon name="trending-up-outline"></ion-icon>
+      </div>
+
+      <div class="budget-row">
+
+        <div>
+          <span>Spent</span>
+          <strong>{{ formatMoney(monthlySpent) }}</strong>
+        </div>
+
+        <div>
+          <span>Budget Left</span>
+          <strong>{{ formatMoney(budgetLeft) }}</strong>
+        </div>
+
+      </div>
+
+      <ion-progress-bar
+        [value]="budgetUsedPercentage"
+        color="success">
+      </ion-progress-bar>
+
+    </div>
+
+    <div class="savings-card">
+
+      <div>
+        <p>Savings Progress</p>
+        <h3>{{ savingsProgress }}%</h3>
+      </div>
+
+      <ion-progress-bar
+        [value]="savingsProgress / 100"
+        color="success">
+      </ion-progress-bar>
+
+    </div>
+
+    <div class="ai-nudge">
+
+      <div class="ai-icon">
+        <ion-icon name="sparkles-outline"></ion-icon>
+      </div>
+
+      <div>
+        <h3>Daily AI Nudge</h3>
+        <p>Add your first transaction and Jangora will start giving smarter financial tips.</p>
+      </div>
+
+    </div>
+
+    <div class="section-title">
+
+      <h3>Recent Transactions</h3>
+
+      <span>
+        View all
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </span>
+
+    </div>
+
+    <div class="transactions">
+
+      <div
+        class="transaction"
+        *ngFor="let item of recentTransactions">
+
+        <div
+          class="transaction-dot"
+          [class.income]="item.type === 'income'">
+        </div>
+
+        <div class="transaction-info">
+          <h4>{{ item.title }}</h4>
+          <p>{{ item.category }}</p>
+        </div>
+
+        <strong
+          [class.income]="item.type === 'income'">
+          {{ item.type === 'expense' ? '-' : '+' }}{{ formatMoney(item.amount) }}
+        </strong>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</ion-content>
+
+<div class="floating-actions">
+
+  <button class="fab-secondary">
+    <ion-icon name="add-outline"></ion-icon>
+  </button>
+
+  <button class="fab-main">
+    <ion-icon name="remove-outline"></ion-icon>
+  </button>
+
+</div>
+
+<div class="bottom-nav">
+
+  <button
+    type="button"
+    class="nav-item"
+    *ngFor="let tab of tabs"
+    [class.active]="activeTab === tab.id"
+    (click)="setTab(tab.id)">
+
+    <div class="nav-icon">
+      <ion-icon [name]="tab.icon"></ion-icon>
+    </div>
+
+    <span>{{ tab.label }}</span>
+
+  </button>
+
+</div>
