@@ -83,8 +83,12 @@ export class AuthService {
     return user ? user.getIdToken() : null;
   }
 
-  async isAuthenticated(): Promise<boolean> {
+  async waitForAuthReady(): Promise<User | null> {
     await this.authReadyPromise;
-    return !!this.authStateSubject.getValue();
+    return this.authStateSubject.getValue();
+  }
+
+  async isAuthenticated(): Promise<boolean> {
+    return !!(await this.waitForAuthReady());
   }
 }

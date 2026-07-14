@@ -38,11 +38,10 @@
       <p
         class="countdown"
         *ngIf="countdown > 0">
-        Resend email in {{ countdown }}s
+        Resend email in {{ countdown }} seconds
       </p>
 
       <ion-button
-        *ngIf="countdown > 0"
         expand="block"
         class="action-btn"
         (click)="verifyEmail()"
@@ -63,8 +62,17 @@
         *ngIf="countdown === 0"
         expand="block"
         class="action-btn"
-        (click)="resendEmail()">
-        Resend Email
+        (click)="resendEmail()"
+        [disabled]="isResending">
+
+        <ion-spinner
+          *ngIf="isResending"
+          name="crescent">
+        </ion-spinner>
+
+        <span *ngIf="!isResending">
+          Resend verification email
+        </span>
       </ion-button>
 
     </div>

@@ -1,14 +1,32 @@
 import { TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { provideRouter, Router, RouterLink } from '@angular/router';
+import { provideRouter } from '@angular/router';
 
 import { AppComponent } from './app.component';
+import { AuthService } from './core/auth/auth.service';
+import { ApiAuthService } from './core/services/api-auth.service';
+import { UserStateService } from './core/services/user-state.service';
 
 describe('AppComponent', () => {
+  const authService = {
+    waitForAuthReady: jasmine.createSpy('waitForAuthReady').and.resolveTo(null),
+  };
+  const apiAuthService = {
+    restoreBackendUser: jasmine.createSpy('restoreBackendUser'),
+  };
+  const userStateService = {
+    clearUser: jasmine.createSpy('clearUser'),
+    setUser: jasmine.createSpy('setUser'),
+  };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
-      providers: [provideRouter([])]
+      providers: [
+        provideRouter([]),
+        { provide: AuthService, useValue: authService },
+        { provide: ApiAuthService, useValue: apiAuthService },
+        { provide: UserStateService, useValue: userStateService },
+      ]
     }).compileComponents();
   });
 
@@ -18,33 +36,18 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should have menu labels', async () => {
+  it('should render the Ionic app shell', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
-    // ion-label is a scoped Stencil component whose slot content is relocated
-    // asynchronously, so wait for hydration before reading textContent (ROU-10799).
-    await fixture.whenStable();
     const app = fixture.nativeElement;
-    const menuItems = app.querySelectorAll('ion-label');
-    expect(menuItems.length).toEqual(12);
-    expect(menuItems[0].textContent).toContain('Inbox');
-    expect(menuItems[1].textContent).toContain('Outbox');
+    expect(app.querySelector('ion-app')).toBeTruthy();
+    expect(app.querySelector('ion-router-outlet')).toBeTruthy();
   });
 
-  it('should have urls', () => {
+  it('should clear backend user state when Firebase has no current user', async () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
-    const app = fixture.nativeElement;
-    expect(app.querySelectorAll('ion-item').length).toEqual(12);
-    // Ionic applies the rendered href through its own async write queue, so
-    // reading the DOM attribute is flaky (FW-6264). Assert the routerLink
-    // binding directly, which resolves synchronously.
-    const router = TestBed.inject(Router);
-    const links = fixture.debugElement
-      .queryAll(By.directive(RouterLink))
-      .map((el) => el.injector.get(RouterLink));
-    expect(links.length).toEqual(6);
-    expect(router.serializeUrl(links[0].urlTree!)).toEqual('/folder/inbox');
-    expect(router.serializeUrl(links[1].urlTree!)).toEqual('/folder/outbox');
+    await fixture.whenStable();
+    expect(userStateService.clearUser).toHaveBeenCalled();
   });
 });

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
+import { API_BASE_URL } from '../api/api.config';
 
 export interface BackendUser {
   id: string;
@@ -24,7 +25,7 @@ export interface FirebaseLoginResponse {
   providedIn: 'root',
 })
 export class ApiAuthService {
-  private readonly apiBaseUrl = 'http://localhost:3000';
+  private readonly apiBaseUrl = API_BASE_URL;
 
   constructor(
     private readonly http: HttpClient,
@@ -50,6 +51,24 @@ export class ApiAuthService {
       const errorMessage =
         error instanceof Error ? error.message : 'Failed to synchronize user with backend';
       throw new Error(`User sync failed: ${errorMessage}`);
+    }
+  }
+
+  async getCurrentUser(): Promise<BackendUser> {
+    return firstValueFrom(
+      this.http.get<BackendUser>(`${this.apiBaseUrl}/users/me`),
+    );
+  }
+
+  async restoreBackendUser(): Promise<BackendUser> {
+    try {
+      return await this.getCurrentUser();
+    } catch (error: unknown) {
+      if (error instanceof HttpErrorResponse && error.status === 404) {
+        return this.syncFirebaseUser();
+      }
+
+      throw error;
     }
   }
 }

@@ -38,6 +38,7 @@ export class VerifyEmailPage implements OnInit, OnDestroy {
   countdown = 45;
 
   isVerifying = false;
+  isResending = false;
   message = '';
   errorMessage = '';
 
@@ -80,37 +81,57 @@ export class VerifyEmailPage implements OnInit, OnDestroy {
       const verified = await this.authService.checkEmailVerified();
 
       if (verified) {
-        try {
-          const backendUser = await this.apiAuthService.syncFirebaseUser();
-          this.userStateService.setUser(backendUser);
-        } catch (syncError: unknown) {
-          const message = syncError instanceof Error ? syncError.message : 'Backend sync warning';
-          console.warn('User sync warning (continuing to dashboard):', message);
-        }
-
+        const backendUser = await this.apiAuthService.syncFirebaseUser();
+        this.userStateService.setUser(backendUser);
         this.router.navigateByUrl('/dashboard');
       } else {
-        this.errorMessage = 'Your email is still not verified. Please check your inbox or resend the link.';
+        this.errorMessage = 'Your email is not verified yet. Please open the verification email and try again.';
       }
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'We could not verify your email right now.';
-      this.errorMessage = message;
+      this.errorMessage = this.getFriendlyFirebaseError(error);
     } finally {
       this.isVerifying = false;
     }
   }
 
   async resendEmail() {
-    this.countdown = 45;
-    this.startCountdown();
+    if (this.countdown > 0) {
+      return;
+    }
+
+    this.isResending = true;
+    this.errorMessage = '';
+    this.message = '';
 
     try {
       await this.authService.sendVerificationEmail();
       this.message = 'A fresh verification email has been sent.';
-      this.errorMessage = '';
+      this.countdown = 45;
+      this.startCountdown();
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'We could not resend the verification email.';
-      this.errorMessage = message;
+      this.errorMessage = this.getFriendlyFirebaseError(error);
+    } finally {
+      this.isResending = false;
+    }
+  }
+
+  private getFriendlyFirebaseError(error: unknown): string {
+    const code =
+      typeof error === 'object' && error !== null && 'code' in error
+        ? String((error as { code?: unknown }).code)
+        : '';
+
+    switch (code) {
+      case 'auth/too-many-requests':
+        return 'Too many requests were made. Please wait a few minutes before trying again.';
+      case 'auth/network-request-failed':
+        return 'Please check your internet connection.';
+      case 'auth/user-disabled':
+        return 'This account has been disabled.';
+      case 'auth/user-token-expired':
+        return 'Your session expired. Please sign in again.';
+      default:
+        return 'Something went wrong. Please try again.';
     }
   }
 }
