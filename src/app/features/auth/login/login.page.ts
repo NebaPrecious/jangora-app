@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
+import { ApiAuthService } from '../../../core/services/api-auth.service';
+import { UserStateService } from '../../../core/services/user-state.service';
 
 import {
   IonContent,
@@ -57,6 +59,8 @@ export class LoginPage {
   constructor(
     private readonly router: Router,
     private readonly authService: AuthService,
+    private readonly apiAuthService: ApiAuthService,
+    private readonly userStateService: UserStateService,
   ) {
     addIcons({
       mailOutline,
@@ -85,6 +89,14 @@ export class LoginPage {
       localStorage.setItem('registeredEmail', credentials.user.email || this.email.trim());
 
       if (await this.authService.checkEmailVerified()) {
+        try {
+          const backendUser = await this.apiAuthService.syncFirebaseUser();
+          this.userStateService.setUser(backendUser);
+        } catch (syncError: unknown) {
+          const message = syncError instanceof Error ? syncError.message : 'Backend sync warning';
+          console.warn('User sync warning (continuing to dashboard):', message);
+        }
+
         this.router.navigateByUrl('/dashboard');
       } else {
         this.router.navigateByUrl('/verify-email');

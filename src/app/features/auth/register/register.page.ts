@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
+import { ApiAuthService } from '../../../core/services/api-auth.service';
+import { UserStateService } from '../../../core/services/user-state.service';
 
 import {
   IonContent,
@@ -63,6 +65,8 @@ export class RegisterPage {
   constructor(
     private readonly router: Router,
     private readonly authService: AuthService,
+    private readonly apiAuthService: ApiAuthService,
+    private readonly userStateService: UserStateService,
   ) {
     addIcons({
       personOutline,
@@ -100,6 +104,15 @@ export class RegisterPage {
       const credentials = await this.authService.register(this.email.trim(), this.password);
       localStorage.setItem('registeredEmail', credentials.user.email || this.email.trim());
       await this.authService.sendVerificationEmail();
+
+      try {
+        const backendUser = await this.apiAuthService.syncFirebaseUser();
+        this.userStateService.setUser(backendUser);
+      } catch (syncError: unknown) {
+        const message = syncError instanceof Error ? syncError.message : 'Backend sync warning';
+        console.warn('User sync warning (continuing to verification):', message);
+      }
+
       this.router.navigateByUrl('/verify-email');
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Unable to create your account right now.';
