@@ -20,4 +20,18 @@ describe('LoginPage', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should prevent empty email login submissions', async () => {
+    await component.login();
+    expect(component.errorMessage).toBe('Please enter your email and password.');
+  });
+
+  it('should show friendly Google authentication failures', () => {
+    expect((component as any).getFriendlyGoogleError({ code: 'auth/popup-blocked' })).toContain(
+      'blocked',
+    );
+    expect((component as any).getFriendlyGoogleError({ code: 'auth/account-exists-with-different-credential' })).toContain(
+      'original method',
+    );
+  });
 });

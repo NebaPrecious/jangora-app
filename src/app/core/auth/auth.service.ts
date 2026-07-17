@@ -6,7 +6,10 @@ import {
   sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
+  GoogleAuthProvider,
+  updateProfile,
 } from 'firebase/auth';
 import { BehaviorSubject } from 'rxjs';
 import { auth } from '../firebase/firebase.config';
@@ -41,6 +44,12 @@ export class AuthService {
     return signInWithEmailAndPassword(auth, email, password);
   }
 
+  async loginWithGoogle() {
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    return signInWithPopup(auth, provider);
+  }
+
   async logout() {
     return signOut(auth);
   }
@@ -72,6 +81,17 @@ export class AuthService {
 
   async sendPasswordReset(email: string): Promise<void> {
     await sendPasswordResetEmail(auth, email);
+  }
+
+  async updateCurrentUserProfile(displayName: string): Promise<void> {
+    const user = auth.currentUser;
+    if (!user) {
+      throw new Error('No authenticated user found.');
+    }
+
+    await updateProfile(user, { displayName });
+    await user.getIdToken(true);
+    this.authStateSubject.next(auth.currentUser);
   }
 
   getCurrentUser(): User | null {

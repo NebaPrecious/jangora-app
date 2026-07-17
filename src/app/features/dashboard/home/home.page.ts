@@ -1,6 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../core/auth/auth.service';
+import { UserStateService } from '../../../core/services/user-state.service';
+import { UserPreferencesService } from '../../../core/services/user-preferences.service';
 
 import {
   IonContent,
@@ -36,10 +39,13 @@ import {
     IonProgressBar
   ]
 })
-export class HomePage {
+export class HomePage implements OnInit {
   private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+  private readonly userStateService = inject(UserStateService);
+  private readonly userPreferencesService = inject(UserPreferencesService);
 
-  userName = 'Precious';
+  userName = 'there';
   currency = localStorage.getItem('currency') || 'XAF';
 
   totalBalance = 2845000;
@@ -88,6 +94,21 @@ export class HomePage {
     this.activeTab = currentPath || 'home';
   }
 
+  ngOnInit(): void {
+    const backendUser = this.userStateService.getUser();
+    const firebaseUser = this.authService.getCurrentUser();
+    const preferences = this.userPreferencesService.getPreferences();
+
+    this.userName =
+      [backendUser?.firstName, backendUser?.lastName].filter(Boolean).join(' ').trim() ||
+      backendUser?.firstName ||
+      firebaseUser?.displayName ||
+      firebaseUser?.email?.split('@')[0] ||
+      'there';
+
+    this.currency = preferences?.preferredCurrency || localStorage.getItem('currency') || 'XAF';
+  }
+
   get budgetUsedPercentage(): number {
     if (this.monthlyBudget === 0) return 0;
     return this.monthlySpent / this.monthlyBudget;
@@ -123,7 +144,7 @@ export class HomePage {
   }
 
   formatMoney(amount: number): string {
-    return `${this.currency} ${amount.toLocaleString()}`;
+    return `${this.currency || 'XAF'} ${Number(amount || 0).toLocaleString()}`;
   }
 
 }

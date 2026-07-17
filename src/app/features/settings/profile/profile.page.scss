@@ -105,6 +105,54 @@
   color: #ffffff;
   font-size: 14px;
   font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.profile-message {
+  font-size: 13px;
+}
+
+.profile-message.success {
+  color: #52B788;
+}
+
+.profile-message.error {
+  color: #ff8a80;
+}
+
+.edit-profile-btn {
+  margin-top: 18px;
+  --border-radius: 18px;
+  --background: linear-gradient(90deg, #40916C, #52B788);
+  --color: #ffffff;
+}
+
+.edit-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.edit-field span {
+  color: rgba(255,255,255,.68);
+  font-size: 12px;
+}
+
+.edit-field ion-input {
+  --background: rgba(255,255,255,.08);
+  --color: #ffffff;
+  --placeholder-color: rgba(255,255,255,.45);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 14px;
+  padding: 0 12px !important;
+}
+
+.cancel-edit-btn {
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,.72);
+  font-weight: 700;
+  padding: 10px 0 0;
 }
 
 .shortcut-card {

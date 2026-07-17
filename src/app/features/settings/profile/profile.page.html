@@ -12,6 +12,11 @@
   <div class="glow glow-two"></div>
 
   <div class="profile-container">
+    <div *ngIf="isLoading" class="profile-card">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading your profile...</p>
+    </div>
+
     <div class="profile-card">
       <div class="avatar-badge">
         <ion-icon name="person-outline"></ion-icon>
@@ -19,6 +24,7 @@
 
       <h1>{{ userName }}</h1>
       <p>{{ userEmail }}</p>
+      <p>{{ verificationStatus }}</p>
 
       <div class="profile-summary">
         <div>
@@ -26,10 +32,59 @@
           <strong>{{ preferredCurrency }}</strong>
         </div>
         <div>
-          <span>Monthly income</span>
-          <strong>{{ formatMoney(monthlyIncome) }}</strong>
+          <span>Income range</span>
+          <strong>{{ incomeRange }}</strong>
+        </div>
+        <div>
+          <span>Goals</span>
+          <strong>{{ goalsSummary }}</strong>
+        </div>
+        <div>
+          <span>Notifications</span>
+          <strong>{{ notificationsSummary }}</strong>
         </div>
       </div>
+
+      <p *ngIf="message" class="profile-message success">{{ message }}</p>
+      <p *ngIf="errorMessage" class="profile-message error">{{ errorMessage }}</p>
+
+      <ion-button
+        *ngIf="!isEditing"
+        expand="block"
+        class="edit-profile-btn"
+        (click)="startEditing()">
+        Edit Profile
+      </ion-button>
+    </div>
+
+    <div class="shortcut-card" *ngIf="isEditing">
+      <div class="edit-field">
+        <span>First name</span>
+        <ion-input [(ngModel)]="editFirstName" type="text"></ion-input>
+      </div>
+
+      <div class="edit-field">
+        <span>Last name</span>
+        <ion-input [(ngModel)]="editLastName" type="text"></ion-input>
+      </div>
+
+      <div class="edit-field">
+        <span>Profile image URL</span>
+        <ion-input [(ngModel)]="editProfileImageUrl" type="url"></ion-input>
+      </div>
+
+      <ion-button
+        expand="block"
+        class="edit-profile-btn"
+        (click)="saveProfile()"
+        [disabled]="isSaving">
+        <ion-spinner *ngIf="isSaving" name="crescent"></ion-spinner>
+        <span *ngIf="!isSaving">Save Profile</span>
+      </ion-button>
+
+      <button type="button" class="cancel-edit-btn" (click)="cancelEditing()">
+        Cancel
+      </button>
     </div>
 
     <div class="shortcut-card">

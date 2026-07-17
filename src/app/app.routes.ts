@@ -73,20 +73,6 @@ export const routes: Routes = [
     loadComponent: () => import('./features/onboarding/ai-introduction/ai-introduction.page').then( m => m.AiIntroductionPage)
   },
   {
-  path: 'goal',
-  loadComponent: () =>
-    import('./features/onboarding/goal/goal.page').then(
-      (m) => m.GoalPage
-    ),
-  },
-  {
-  path: 'currency',
-  loadComponent: () =>
-    import('./features/onboarding/currency/currency.page').then(
-      (m) => m.CurrencyPage
-    ),
-},
-  {
     path: 'verify-email',
     loadComponent: () => import('./features/auth/verify-email/verify-email.page').then( m => m.VerifyEmailPage)
   },

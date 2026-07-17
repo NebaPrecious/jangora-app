@@ -20,4 +20,18 @@ describe('RegisterPage', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should prevent incomplete registration submissions', async () => {
+    await component.register();
+    expect(component.errorMessage).toBe('Please complete all fields to create your account.');
+  });
+
+  it('should show friendly Google authentication failures', () => {
+    expect((component as any).getFriendlyGoogleError({ code: 'auth/popup-closed-by-user' })).toContain(
+      'closed',
+    );
+    expect((component as any).getFriendlyGoogleError({ code: 'auth/network-request-failed' })).toBe(
+      'Please check your internet connection.',
+    );
+  });
 });

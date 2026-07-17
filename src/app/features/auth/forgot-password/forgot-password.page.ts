@@ -59,8 +59,7 @@ export class ForgotPasswordPage {
       this.emailSent = true;
       this.message = 'A reset link has been sent to your email.';
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'We could not send a reset link right now.';
-      this.message = message.includes('auth/') ? 'We could not send a reset link. Please try again.' : message;
+      this.message = this.getFriendlyResetError(error);
     } finally {
       this.loading = false;
     }
@@ -68,5 +67,23 @@ export class ForgotPasswordPage {
 
   backToLogin() {
     this.router.navigateByUrl('/login');
+  }
+
+  private getFriendlyResetError(error: unknown): string {
+    const code =
+      typeof error === 'object' && error !== null && 'code' in error
+        ? String((error as { code?: unknown }).code)
+        : '';
+
+    switch (code) {
+      case 'auth/network-request-failed':
+        return 'Please check your internet connection.';
+      case 'auth/too-many-requests':
+        return 'Too many requests were made. Please wait a few minutes before trying again.';
+      case 'auth/invalid-email':
+        return 'Please enter a valid email address.';
+      default:
+        return 'We could not send a reset link. Please try again.';
+    }
   }
 }

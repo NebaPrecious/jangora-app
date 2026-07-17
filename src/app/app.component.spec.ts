@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { AuthService } from './core/auth/auth.service';
 import { ApiAuthService } from './core/services/api-auth.service';
 import { UserStateService } from './core/services/user-state.service';
+import { UserPreferencesService } from './core/services/user-preferences.service';
 
 describe('AppComponent', () => {
   const authService = {
@@ -17,6 +18,11 @@ describe('AppComponent', () => {
     clearUser: jasmine.createSpy('clearUser'),
     setUser: jasmine.createSpy('setUser'),
   };
+  const userPreferencesService = {
+    clearPreferences: jasmine.createSpy('clearPreferences'),
+    getMyPreferences: jasmine.createSpy('getMyPreferences'),
+    getNextOnboardingRoute: jasmine.createSpy('getNextOnboardingRoute').and.returnValue('/goal'),
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -26,6 +32,7 @@ describe('AppComponent', () => {
         { provide: AuthService, useValue: authService },
         { provide: ApiAuthService, useValue: apiAuthService },
         { provide: UserStateService, useValue: userStateService },
+        { provide: UserPreferencesService, useValue: userPreferencesService },
       ]
     }).compileComponents();
   });
@@ -49,5 +56,6 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     await fixture.whenStable();
     expect(userStateService.clearUser).toHaveBeenCalled();
+    expect(userPreferencesService.clearPreferences).toHaveBeenCalled();
   });
 });

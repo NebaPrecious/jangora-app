@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
 import { ApiAuthService } from '../../../core/services/api-auth.service';
 import { UserStateService } from '../../../core/services/user-state.service';
+import { UserPreferencesService } from '../../../core/services/user-preferences.service';
 
 import {
   IonContent,
@@ -49,6 +50,7 @@ export class VerifyEmailPage implements OnInit, OnDestroy {
     private readonly authService: AuthService,
     private readonly apiAuthService: ApiAuthService,
     private readonly userStateService: UserStateService,
+    private readonly userPreferencesService: UserPreferencesService,
   ) {}
 
   ngOnInit(): void {
@@ -83,6 +85,13 @@ export class VerifyEmailPage implements OnInit, OnDestroy {
       if (verified) {
         const backendUser = await this.apiAuthService.syncFirebaseUser();
         this.userStateService.setUser(backendUser);
+
+        try {
+          await this.userPreferencesService.saveCompletedOnboardingFromLocalStorage();
+        } catch (preferencesError: unknown) {
+          console.warn('Preference sync warning after verification.');
+        }
+
         this.router.navigateByUrl('/dashboard');
       } else {
         this.errorMessage = 'Your email is not verified yet. Please open the verification email and try again.';

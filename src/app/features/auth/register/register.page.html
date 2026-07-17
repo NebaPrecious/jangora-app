@@ -148,14 +148,24 @@
     <ion-button
       expand="block"
       fill="outline"
-      class="google-button">
+      class="google-button"
+      (click)="registerWithGoogle()"
+      [disabled]="googleLoading">
 
       <ion-icon
+        *ngIf="!googleLoading"
         slot="start"
         name="logo-google">
       </ion-icon>
 
-      Continue with Google
+      <ion-spinner
+        *ngIf="googleLoading"
+        name="crescent">
+      </ion-spinner>
+
+      <span *ngIf="!googleLoading">
+        Continue with Google
+      </span>
 
     </ion-button>
 

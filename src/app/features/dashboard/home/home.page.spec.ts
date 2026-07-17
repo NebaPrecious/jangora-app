@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HomePage } from './home.page';
@@ -10,6 +11,7 @@ describe('HomePage', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HomePage, RouterTestingModule],
+      providers: [provideHttpClient()],
     });
 
     fixture = TestBed.createComponent(HomePage);

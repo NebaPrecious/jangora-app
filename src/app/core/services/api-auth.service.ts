@@ -15,6 +15,13 @@ export interface BackendUser {
   isActive: boolean;
 }
 
+export interface UpdateCurrentUserPayload {
+  firstName?: string;
+  lastName?: string;
+  displayName?: string;
+  profileImageUrl?: string | null;
+}
+
 export interface FirebaseLoginResponse {
   user: BackendUser;
   firebaseUid: string;
@@ -70,5 +77,11 @@ export class ApiAuthService {
 
       throw error;
     }
+  }
+
+  async updateCurrentUser(payload: UpdateCurrentUserPayload): Promise<BackendUser> {
+    return firstValueFrom(
+      this.http.patch<BackendUser>(`${this.apiBaseUrl}/users/me`, payload),
+    );
   }
 }
