@@ -54,17 +54,5 @@
     </div>
   </div>
 
-  <div class="bottom-nav">
-    <button
-      type="button"
-      class="nav-item"
-      *ngFor="let tab of tabs"
-      [class.active]="activeTab === tab.id"
-      (click)="setTab(tab.id)">
-      <div class="nav-icon">
-        <ion-icon [name]="tab.icon"></ion-icon>
-      </div>
-      <span>{{ tab.label }}</span>
-    </button>
-  </div>
+  <app-dashboard-tabs></app-dashboard-tabs>
 </ion-content>

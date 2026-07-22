@@ -1,0 +1,133 @@
+<ion-content [fullscreen]="true" class="expenses-page">
+  <div class="glow glow-one"></div>
+  <div class="glow glow-two"></div>
+
+  <div class="expenses-container">
+    <div class="page-header">
+      <div>
+        <p class="eyebrow">Dashboard</p>
+        <h1>Expenses</h1>
+        <p>Track everyday spending with clear, current data.</p>
+      </div>
+      <button type="button" class="icon-button" (click)="loadExpenses(false)" [disabled]="isRetrying">
+        <ion-icon name="refresh-outline"></ion-icon>
+      </button>
+    </div>
+
+    <div class="summary-card">
+      <span>This month</span>
+      <strong>{{ formatMoney(summary?.totalSpentThisMonth || 0, expenses[0]?.currency || 'XAF') }}</strong>
+      <p>{{ summary?.transactionCountThisMonth || 0 }} tracked transactions</p>
+    </div>
+
+    <div class="category-breakdown" *ngIf="summary?.spendingByCategory?.length">
+      <div class="category-row" *ngFor="let item of summary?.spendingByCategory">
+        <span>{{ item.category }}</span>
+        <div class="bar">
+          <div [style.width.%]="summary?.totalSpentThisMonth ? (item.total / (summary?.totalSpentThisMonth || 1)) * 100 : 0"></div>
+        </div>
+        <strong>{{ formatMoney(item.total, expenses[0]?.currency || 'XAF') }}</strong>
+      </div>
+    </div>
+
+    <div class="filters">
+      <label class="field search-field">
+        <ion-icon name="search-outline"></ion-icon>
+        <input
+          type="search"
+          name="search"
+          [(ngModel)]="filters.search"
+          (ngModelChange)="applyFilters()"
+          placeholder="Search note or category" />
+      </label>
+
+      <div class="field-row">
+        <div class="field option-field">
+          <span>Category</span>
+          <button type="button" class="option-trigger" (click)="toggleCategoryOptions()">
+            {{ filters.category || 'All' }}
+          </button>
+          <div class="option-list" *ngIf="isCategoryOpen">
+            <button
+              type="button"
+              *ngFor="let category of categories"
+              [class.selected]="filters.category === category"
+              (click)="selectCategory(category)">
+              {{ category || 'All' }}
+            </button>
+          </div>
+        </div>
+
+        <label class="field">
+          <span>From</span>
+          <input type="date" name="dateFrom" [(ngModel)]="filters.dateFrom" (change)="applyFilters()" />
+        </label>
+
+        <label class="field">
+          <span>To</span>
+          <input type="date" name="dateTo" [(ngModel)]="filters.dateTo" (change)="applyFilters()" />
+        </label>
+      </div>
+
+      <div class="segmented">
+        <button
+          type="button"
+          *ngFor="let view of views"
+          [class.active]="filters.view === view"
+          (click)="setView(view)">
+          {{ view | titlecase }}
+        </button>
+      </div>
+    </div>
+
+    <div class="state-card loading" *ngIf="isLoading">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading your expenses...</p>
+    </div>
+
+    <div class="state-card error" *ngIf="!isLoading && errorMessage">
+      <p>{{ errorMessage }}</p>
+      <button type="button" (click)="loadExpenses(false)">Try again</button>
+    </div>
+
+    <div class="state-card empty" *ngIf="!isLoading && !errorMessage && expenses.length === 0">
+      <ion-icon name="receipt-outline"></ion-icon>
+      <h2>No expenses yet</h2>
+      <p>Add your first expense and it will appear here.</p>
+      <button type="button" (click)="addExpense()">Add Expense</button>
+    </div>
+
+    <div class="success-state" *ngIf="!isLoading && !errorMessage && expenses.length">
+      <p>{{ expenses.length }} expense{{ expenses.length === 1 ? '' : 's' }} loaded</p>
+    </div>
+
+    <div class="expense-list" *ngIf="!isLoading && !errorMessage && expenses.length">
+      <button
+        type="button"
+        class="expense-row"
+        *ngFor="let expense of expenses; let i = index; trackBy: trackByExpenseId"
+        [style.animationDelay.ms]="i * 35"
+        (click)="openExpense(expense)">
+        <div class="expense-icon">
+          <ion-icon name="receipt-outline"></ion-icon>
+        </div>
+        <div class="expense-info">
+          <h2>{{ expense.category }}</h2>
+          <p>{{ formatDate(expense.date) }}<span *ngIf="expense.note"> · {{ expense.note }}</span></p>
+        </div>
+        <strong>-{{ formatMoney(expense.amount, expense.currency) }}</strong>
+      </button>
+    </div>
+  </div>
+
+  <div class="floating-actions">
+    <button type="button" class="fab-secondary" (click)="addSavings()" aria-label="Add savings">
+      <ion-icon name="wallet-outline"></ion-icon>
+    </button>
+    <button type="button" class="fab-main" (click)="addExpense()" aria-label="Add expense">
+      <ion-icon name="add-outline"></ion-icon>
+    </button>
+  </div>
+
+  <app-dashboard-tabs></app-dashboard-tabs>
+</ion-content>

@@ -1,0 +1,468 @@
+.expenses-page {
+  --background: linear-gradient(180deg, #06140f 0%, #081c15 45%, #0b2d22 100%);
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(110px);
+  opacity: 0.22;
+  pointer-events: none;
+}
+
+.glow-one {
+  width: 260px;
+  height: 260px;
+  background: #52b788;
+  top: -110px;
+  right: -90px;
+}
+
+.glow-two {
+  width: 220px;
+  height: 220px;
+  background: #40916c;
+  bottom: 120px;
+  left: -100px;
+}
+
+.expenses-container {
+  position: relative;
+  z-index: 2;
+  padding: 58px 22px 150px;
+  max-width: 720px;
+  margin: auto;
+  animation: fade-up 360ms ease both;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 14px;
+}
+
+.page-header h1 {
+  margin: 0 0 8px;
+  color: #ffffff;
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.page-header p,
+.summary-card span,
+.summary-card p,
+.field span,
+.category-row span,
+.expense-info p {
+  color: rgba(255, 255, 255, 0.64);
+}
+
+.page-header p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.icon-button,
+.fab-main,
+.fab-secondary,
+.state-card button {
+  min-width: 48px;
+  min-height: 48px;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.icon-button {
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.summary-card,
+.filters,
+.state-card,
+.expense-row,
+.category-breakdown,
+.success-state {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px);
+}
+
+.summary-card {
+  padding: 26px;
+  border-radius: 30px;
+  margin-bottom: 16px;
+  background:
+    radial-gradient(circle at top right, rgba(233, 196, 106, 0.18), transparent 36%),
+    linear-gradient(135deg, rgba(82, 183, 136, 0.24), rgba(255, 255, 255, 0.07));
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.24);
+  animation: card-enter 280ms ease-out both;
+}
+
+.summary-card strong {
+  display: block;
+  margin: 10px 0 4px;
+  color: #ffffff;
+  font-size: 36px;
+  font-weight: 900;
+}
+
+.category-breakdown,
+.filters,
+.state-card,
+.success-state {
+  border-radius: 26px;
+  margin-bottom: 18px;
+}
+
+.category-breakdown,
+.filters {
+  padding: 16px;
+}
+
+.category-row {
+  display: grid;
+  grid-template-columns: 90px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  min-height: 36px;
+  font-size: 12px;
+}
+
+.category-row strong {
+  color: #ffffff;
+  font-size: 12px;
+}
+
+.bar {
+  height: 8px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.bar div {
+  height: 100%;
+  border-radius: inherit;
+  background: #52b788;
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.field {
+  min-height: 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.search-field {
+  flex-direction: row;
+  align-items: center;
+}
+
+.search-field ion-icon {
+  color: #52b788;
+  font-size: 20px;
+}
+
+input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  color: #ffffff;
+  background: transparent;
+  font: inherit;
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.48);
+}
+
+.option-trigger {
+  min-height: 34px;
+  border: 0;
+  background: transparent;
+  color: #ffffff;
+  text-align: left;
+  font: inherit;
+  font-weight: 800;
+}
+
+.option-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+  animation: selector-open 180ms ease-out both;
+}
+
+.option-list button {
+  min-height: 44px;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 700;
+  text-align: left;
+  padding: 0 12px;
+}
+
+.option-list button.selected {
+  border-color: #52b788;
+  background: rgba(82, 183, 136, 0.2);
+  color: #ffffff;
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.segmented button {
+  min-height: 48px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 800;
+}
+
+.segmented button.active {
+  background: rgba(82, 183, 136, 0.2);
+  color: #52b788;
+  border-color: rgba(82, 183, 136, 0.42);
+}
+
+.state-card {
+  padding: 26px;
+  text-align: center;
+  animation: card-enter 220ms ease-out both;
+}
+
+.state-card ion-icon,
+.state-card ion-spinner {
+  color: #52b788;
+  font-size: 34px;
+}
+
+.state-card h2 {
+  margin: 12px 0 8px;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.state-card p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.5;
+}
+
+.state-card.error {
+  border-color: rgba(231, 76, 60, 0.3);
+  background: rgba(231, 76, 60, 0.12);
+}
+
+.state-card button {
+  margin-top: 16px;
+  padding: 0 18px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #40916c, #52b788);
+  font-weight: 800;
+}
+
+.success-state {
+  padding: 12px 14px;
+  animation: card-enter 220ms ease-out both;
+}
+
+.success-state p {
+  margin: 0;
+  color: #95d5b2;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.expense-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.expense-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 22px;
+  color: #ffffff;
+  text-align: left;
+  animation: list-enter 220ms ease-out both;
+  transition: transform 160ms ease, border-color 160ms ease;
+}
+
+.expense-icon {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 15px;
+  background: rgba(82, 183, 136, 0.14);
+  color: #52b788;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.expense-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.expense-info h2 {
+  margin: 0 0 5px;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.expense-info p {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.expense-row strong {
+  color: #ff8a80;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.floating-actions {
+  position: fixed;
+  right: 20px;
+  bottom: 98px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fab-main,
+.fab-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.35);
+}
+
+.fab-main {
+  width: 58px;
+  height: 58px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #40916c, #52b788);
+}
+
+.fab-secondary {
+  width: 48px;
+  height: 48px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.icon-button:active,
+.segmented button:active,
+.option-trigger:active,
+.option-list button:active,
+.expense-row:active,
+.state-card button:active,
+.fab-main:active,
+.fab-secondary:active {
+  transform: scale(0.96);
+}
+
+@media (min-width: 620px) {
+  .field-row {
+    grid-template-columns: 1.2fr 1fr 1fr;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes selector-open {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes list-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

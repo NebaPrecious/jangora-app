@@ -1,0 +1,300 @@
+.jangora-header {
+  --background: transparent;
+}
+
+.jangora-header ion-toolbar {
+  --background: rgba(6, 20, 15, 0.55);
+  --color: #ffffff;
+  --border-width: 0;
+  backdrop-filter: blur(14px);
+}
+
+.jangora-header ion-back-button {
+  --color: #52b788;
+}
+
+.expense-form-page {
+  --background: linear-gradient(180deg, #06140f 0%, #081c15 45%, #0b2d22 100%);
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(110px);
+  opacity: 0.22;
+  pointer-events: none;
+}
+
+.glow-one {
+  width: 240px;
+  height: 240px;
+  background: #52b788;
+  top: -100px;
+  right: -90px;
+}
+
+.glow-two {
+  width: 210px;
+  height: 210px;
+  background: #40916c;
+  bottom: 80px;
+  left: -100px;
+}
+
+.form-container {
+  position: relative;
+  z-index: 2;
+  padding: 32px 22px 56px;
+  max-width: 720px;
+  margin: auto;
+  animation: fade-up 340ms ease both;
+}
+
+.form-heading p {
+  margin: 0 0 8px;
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.form-heading h1 {
+  margin: 0 0 24px;
+  color: #ffffff;
+  font-size: 30px;
+  font-weight: 900;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.field,
+.toggle-row,
+.state-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 22px;
+  backdrop-filter: blur(18px);
+  animation: card-enter 220ms ease-out both;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+}
+
+.field span,
+.toggle-row span {
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.amount-field {
+  background:
+    radial-gradient(circle at top right, rgba(233, 196, 106, 0.16), transparent 34%),
+    linear-gradient(135deg, rgba(82, 183, 136, 0.18), rgba(255, 255, 255, 0.07));
+}
+
+.amount-field div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.amount-field input {
+  font-size: 34px;
+  font-weight: 900;
+}
+
+.amount-field ion-icon {
+  color: #52b788;
+  font-size: 26px;
+}
+
+input,
+textarea {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #ffffff;
+  font: inherit;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(255, 255, 255, 0.48);
+}
+
+textarea {
+  resize: vertical;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.option-trigger {
+  min-height: 38px;
+  border: 0;
+  background: transparent;
+  color: #ffffff;
+  text-align: left;
+  font: inherit;
+  font-size: 17px;
+  font-weight: 900;
+  transition: transform 160ms ease;
+}
+
+.option-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+  animation: selector-open 180ms ease-out both;
+}
+
+.option-list button {
+  min-height: 44px;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 800;
+  transition: transform 160ms ease, border-color 160ms ease;
+}
+
+.option-list button.selected {
+  border-color: #52b788;
+  background: rgba(82, 183, 136, 0.2);
+  color: #ffffff;
+}
+
+.toggle-row {
+  min-height: 76px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.toggle-row p {
+  margin: 5px 0 0;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 13px;
+}
+
+.toggle-row input {
+  width: 24px;
+  height: 24px;
+  accent-color: #52b788;
+}
+
+.error-message {
+  margin: 0;
+  color: #ff8a80;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.button-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.primary-button,
+.secondary-button {
+  min-height: 56px;
+  border-radius: 18px;
+  font-weight: 900;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.primary-button {
+  border: none;
+  background: linear-gradient(90deg, #40916c, #52b788);
+  color: #ffffff;
+  box-shadow: 0 10px 30px rgba(82, 183, 136, 0.28);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.secondary-button {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.74);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.primary-button[disabled],
+.secondary-button[disabled] {
+  opacity: 0.68;
+}
+
+.state-card {
+  padding: 26px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.primary-button:active,
+.secondary-button:active,
+.option-trigger:active,
+.option-list button:active,
+.field:active {
+  transform: scale(0.98);
+}
+
+@media (min-width: 620px) {
+  .field-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes selector-open {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

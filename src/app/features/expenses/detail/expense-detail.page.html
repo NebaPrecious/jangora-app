@@ -1,0 +1,82 @@
+<ion-header [translucent]="true" class="jangora-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/expenses"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Expense Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="expense-detail-page">
+  <div class="glow glow-one"></div>
+  <div class="glow glow-two"></div>
+
+  <div class="detail-container">
+    <div class="state-card" *ngIf="isLoading">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading expense...</p>
+    </div>
+
+    <div class="state-card error" *ngIf="!isLoading && errorMessage && !expense">
+      <p>{{ errorMessage }}</p>
+      <button type="button" (click)="loadExpense()">Try again</button>
+    </div>
+
+    <ng-container *ngIf="!isLoading && expense">
+      <div class="hero-card">
+        <p>{{ expense.category }}</p>
+        <h1>{{ formatMoney(expense.amount, expense.currency) }}</h1>
+        <span>{{ formatDateTime(expense.date) }}</span>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-card">
+          <span>Category</span>
+          <strong>{{ expense.category }}</strong>
+        </div>
+        <div class="detail-card">
+          <span>Currency</span>
+          <strong>{{ expense.currency }}</strong>
+        </div>
+        <div class="detail-card">
+          <span>Recurring</span>
+          <strong>{{ expense.isRecurring ? 'Yes' : 'No' }}</strong>
+        </div>
+        <div class="detail-card">
+          <span>Repeats</span>
+          <strong>{{ expense.recurrenceType || 'Not recurring' }}</strong>
+        </div>
+      </div>
+
+      <div class="note-card">
+        <span>Note</span>
+        <p>{{ expense.note || 'No note added.' }}</p>
+      </div>
+
+      <div class="timeline-card">
+        <div>
+          <span>Created</span>
+          <strong>{{ formatDateTime(expense.createdAt) }}</strong>
+        </div>
+        <div>
+          <span>Updated</span>
+          <strong>{{ formatDateTime(expense.updatedAt) }}</strong>
+        </div>
+      </div>
+
+      <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <div class="action-row">
+        <button type="button" class="secondary-button" (click)="editExpense()" [disabled]="isDeleting">
+          <ion-icon name="create-outline"></ion-icon>
+          Edit
+        </button>
+        <button type="button" class="danger-button" (click)="confirmDelete()" [disabled]="isDeleting">
+          <ion-spinner *ngIf="isDeleting" name="crescent"></ion-spinner>
+          <ion-icon *ngIf="!isDeleting" name="trash-outline"></ion-icon>
+          <span *ngIf="!isDeleting">Delete</span>
+        </button>
+      </div>
+    </ng-container>
+  </div>
+</ion-content>

@@ -1,9 +1,12 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
 import { UserStateService } from '../../../core/services/user-state.service';
 import { UserPreferencesService } from '../../../core/services/user-preferences.service';
+import { Expense, ExpensesService, ExpenseSummary } from '../../../core/services/expenses.service';
+import { DashboardTabsComponent } from '../../../shared/components/dashboard-tabs/dashboard-tabs.component';
+import { Subscription } from 'rxjs';
 
 import {
   IonContent,
@@ -36,32 +39,28 @@ import {
     CommonModule,
     IonContent,
     IonIcon,
-    IonProgressBar
+    IonProgressBar,
+    DashboardTabsComponent
   ]
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
   private readonly userStateService = inject(UserStateService);
   private readonly userPreferencesService = inject(UserPreferencesService);
+  private readonly expensesService = inject(ExpensesService);
 
   userName = 'there';
   currency = localStorage.getItem('currency') || 'XAF';
 
-  totalBalance = 2845000;
-  monthlySpent = 125000;
+  totalBalance = 0;
+  monthlySpent = 0;
   monthlyBudget = 250000;
   savingsProgress = 72;
-
-  activeTab = 'home';
-
-  tabs = [
-    { id: 'home', label: 'Home', icon: 'home-outline' },
-    { id: 'expenses', label: 'Expenses', icon: 'receipt-outline' },
-    { id: 'savings', label: 'Savings', icon: 'wallet-outline' },
-    { id: 'budget', label: 'Budget', icon: 'pie-chart-outline' },
-    { id: 'chat', label: 'Chat', icon: 'chatbubble-ellipses-outline' }
-  ];
+  isExpenseDataLoading = true;
+  expenseDataError = '';
+  expenseSummary: ExpenseSummary | null = null;
+  private refreshSubscription?: Subscription;
 
   quickActions = [
     { label: 'Add Expense', icon: 'remove-outline', action: 'add-expense' },
@@ -69,11 +68,7 @@ export class HomePage implements OnInit {
     { label: 'View Budget', icon: 'pie-chart-outline', action: 'view-budget' }
   ];
 
-  recentTransactions = [
-    { title: 'Transport', category: 'Expense', amount: 1500, type: 'expense' },
-    { title: 'Lunch', category: 'Food', amount: 2500, type: 'expense' },
-    { title: 'Savings Deposit', category: 'Savings', amount: 10000, type: 'income' }
-  ];
+  recentTransactions: Expense[] = [];
 
   constructor() {
     addIcons({
@@ -89,12 +84,9 @@ export class HomePage implements OnInit {
       trendingUpOutline,
       chevronForwardOutline
     });
-
-    const currentPath = this.router.url.replace('/', '');
-    this.activeTab = currentPath || 'home';
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     const backendUser = this.userStateService.getUser();
     const firebaseUser = this.authService.getCurrentUser();
     const preferences = this.userPreferencesService.getPreferences();
@@ -107,6 +99,20 @@ export class HomePage implements OnInit {
       'there';
 
     this.currency = preferences?.preferredCurrency || localStorage.getItem('currency') || 'XAF';
+    this.refreshSubscription = this.expensesService.refresh$.subscribe(() => {
+      if (!this.isExpenseDataLoading) {
+        void this.loadExpenseData(false);
+      }
+    });
+    await this.loadExpenseData();
+  }
+
+  ngOnDestroy(): void {
+    this.refreshSubscription?.unsubscribe();
+  }
+
+  async ionViewWillEnter(): Promise<void> {
+    await this.loadExpenseData(false);
   }
 
   get budgetUsedPercentage(): number {
@@ -118,11 +124,6 @@ export class HomePage implements OnInit {
     return this.monthlyBudget - this.monthlySpent;
   }
 
-  setTab(tab: string): void {
-    this.activeTab = tab;
-    void this.router.navigateByUrl(`/${tab}`);
-  }
-
   goToProfile(): void {
     void this.router.navigateByUrl('/profile');
   }
@@ -130,7 +131,7 @@ export class HomePage implements OnInit {
   handleQuickAction(action: string): void {
     switch (action) {
       case 'add-expense':
-        void this.router.navigateByUrl('/expenses');
+        void this.router.navigateByUrl('/expenses/add');
         break;
       case 'add-savings':
         void this.router.navigateByUrl('/savings');
@@ -145,6 +146,40 @@ export class HomePage implements OnInit {
 
   formatMoney(amount: number): string {
     return `${this.currency || 'XAF'} ${Number(amount || 0).toLocaleString()}`;
+  }
+
+  viewAllExpenses(): void {
+    void this.router.navigateByUrl('/expenses');
+  }
+
+  formatExpenseDate(date: string): string {
+    return new Intl.DateTimeFormat(undefined, {
+      month: 'short',
+      day: 'numeric',
+    }).format(new Date(date));
+  }
+
+  private async loadExpenseData(showLoading = true): Promise<void> {
+    this.isExpenseDataLoading = showLoading;
+    this.expenseDataError = '';
+
+    try {
+      const [recentExpenses, summary] = await Promise.all([
+        this.expensesService.getRecentExpenses(),
+        this.expensesService.getExpenseSummary(),
+      ]);
+      this.recentTransactions = recentExpenses;
+      this.expenseSummary = summary;
+      this.monthlySpent = summary.totalSpentThisMonth;
+
+      if (recentExpenses[0]?.currency) {
+        this.currency = recentExpenses[0].currency;
+      }
+    } catch {
+      this.expenseDataError = 'We could not load your latest expense data.';
+    } finally {
+      this.isExpenseDataLoading = false;
+    }
   }
 
 }

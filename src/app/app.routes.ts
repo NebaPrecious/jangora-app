@@ -89,16 +89,26 @@ export const routes: Routes = [
   {
     path: 'expenses',
     loadComponent: () =>
-      import('./features/dashboard/section/section.page').then((m) => m.SectionPage),
+      import('./features/expenses/list/expenses-list.page').then((m) => m.ExpensesListPage),
     canActivate: [AuthGuard],
-    data: {
-      section: {
-        title: 'Expenses',
-        description: 'Your everyday spending stays in sync with your goals.',
-        icon: 'receipt-outline',
-        showQuickActions: true,
-      },
-    },
+  },
+  {
+    path: 'expenses/add',
+    loadComponent: () =>
+      import('./features/expenses/form/expense-form.page').then((m) => m.ExpenseFormPage),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'expenses/:id',
+    loadComponent: () =>
+      import('./features/expenses/detail/expense-detail.page').then((m) => m.ExpenseDetailPage),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'expenses/:id/edit',
+    loadComponent: () =>
+      import('./features/expenses/form/expense-form.page').then((m) => m.ExpenseFormPage),
+    canActivate: [AuthGuard],
   },
   {
     path: 'savings',

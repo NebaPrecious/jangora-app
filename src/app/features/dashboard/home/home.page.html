@@ -34,7 +34,7 @@
       <h2>{{ formatMoney(totalBalance) }}</h2>
 
       <p class="balance-note">
-        Your financial picture will grow as you track expenses and savings.
+        Balance starts at zero until income, savings, or an opening balance is added.
       </p>
 
     </div>
@@ -117,7 +117,7 @@
 
       <h3>Recent Transactions</h3>
 
-      <span>
+      <span (click)="viewAllExpenses()" role="button" tabindex="0">
         View all
         <ion-icon name="chevron-forward-outline"></ion-icon>
       </span>
@@ -126,24 +126,42 @@
 
     <div class="transactions">
 
+      <div class="transaction muted" *ngIf="isExpenseDataLoading">
+        <div class="transaction-dot"></div>
+        <div class="transaction-info">
+          <h4>Loading transactions</h4>
+          <p>Getting your latest expenses...</p>
+        </div>
+      </div>
+
+      <div class="transaction muted" *ngIf="!isExpenseDataLoading && expenseDataError">
+        <div class="transaction-dot"></div>
+        <div class="transaction-info">
+          <h4>Expenses unavailable</h4>
+          <p>{{ expenseDataError }}</p>
+        </div>
+      </div>
+
+      <div class="transaction muted" *ngIf="!isExpenseDataLoading && !expenseDataError && recentTransactions.length === 0">
+        <div class="transaction-dot"></div>
+        <div class="transaction-info">
+          <h4>No expenses yet</h4>
+          <p>Add your first expense to see it here.</p>
+        </div>
+      </div>
+
       <div
         class="transaction"
         *ngFor="let item of recentTransactions">
 
-        <div
-          class="transaction-dot"
-          [class.income]="item.type === 'income'">
-        </div>
+        <div class="transaction-dot"></div>
 
         <div class="transaction-info">
-          <h4>{{ item.title }}</h4>
-          <p>{{ item.category }}</p>
+          <h4>{{ item.category }}</h4>
+          <p>{{ formatExpenseDate(item.date) }}{{ item.note ? ' · ' + item.note : '' }}</p>
         </div>
 
-        <strong
-          [class.income]="item.type === 'income'">
-          {{ item.type === 'expense' ? '-' : '+' }}{{ formatMoney(item.amount) }}
-        </strong>
+        <strong>-{{ formatMoney(+item.amount) }}</strong>
 
       </div>
 
@@ -155,31 +173,14 @@
 
 <div class="floating-actions">
 
-  <button class="fab-secondary">
+  <button class="fab-secondary" (click)="handleQuickAction('add-savings')">
     <ion-icon name="add-outline"></ion-icon>
   </button>
 
-  <button class="fab-main">
+  <button class="fab-main" (click)="handleQuickAction('add-expense')">
     <ion-icon name="remove-outline"></ion-icon>
   </button>
 
 </div>
 
-<div class="bottom-nav">
-
-  <button
-    type="button"
-    class="nav-item"
-    *ngFor="let tab of tabs"
-    [class.active]="activeTab === tab.id"
-    (click)="setTab(tab.id)">
-
-    <div class="nav-icon">
-      <ion-icon [name]="tab.icon"></ion-icon>
-    </div>
-
-    <span>{{ tab.label }}</span>
-
-  </button>
-
-</div>
+<app-dashboard-tabs></app-dashboard-tabs>

@@ -9,6 +9,7 @@ import {
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
+import { DashboardTabsComponent } from '../../../shared/components/dashboard-tabs/dashboard-tabs.component';
 
 import {
   homeOutline,
@@ -33,21 +34,11 @@ interface SectionRouteData {
   standalone: true,
   templateUrl: './section.page.html',
   styleUrls: ['./section.page.scss'],
-  imports: [CommonModule, IonContent, IonIcon, IonProgressBar],
+  imports: [CommonModule, IonContent, IonIcon, IonProgressBar, DashboardTabsComponent],
 })
 export class SectionPage implements OnInit {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-
-  activeTab = 'home';
-
-  tabs = [
-    { id: 'home', label: 'Home', icon: 'home-outline' },
-    { id: 'expenses', label: 'Expenses', icon: 'receipt-outline' },
-    { id: 'savings', label: 'Savings', icon: 'wallet-outline' },
-    { id: 'budget', label: 'Budget', icon: 'pie-chart-outline' },
-    { id: 'chat', label: 'Chat', icon: 'chatbubble-ellipses-outline' },
-  ];
 
   quickActions = [
     { label: 'Add Expense', icon: 'remove-outline', action: 'add-expense' },
@@ -70,9 +61,6 @@ export class SectionPage implements OnInit {
       removeOutline,
       sparklesOutline,
     });
-
-    const currentPath = this.router.url.replace('/', '');
-    this.activeTab = currentPath || 'home';
   }
 
   ngOnInit(): void {
@@ -85,15 +73,10 @@ export class SectionPage implements OnInit {
     });
   }
 
-  setTab(tab: string): void {
-    this.activeTab = tab;
-    void this.router.navigateByUrl(`/${tab}`);
-  }
-
   handleQuickAction(action: string): void {
     switch (action) {
       case 'add-expense':
-        void this.router.navigateByUrl('/expenses');
+        void this.router.navigateByUrl('/expenses/add');
         break;
       case 'add-savings':
         void this.router.navigateByUrl('/savings');

@@ -1,0 +1,13 @@
+<div class="bottom-nav">
+  <button
+    type="button"
+    class="nav-item"
+    *ngFor="let tab of tabs"
+    [class.active]="activeTab === tab.id"
+    (click)="setTab(tab.route)">
+    <div class="nav-icon">
+      <ion-icon [name]="tab.icon"></ion-icon>
+    </div>
+    <span>{{ tab.label }}</span>
+  </button>
+</div>

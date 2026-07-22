@@ -54,6 +54,7 @@ export class AppComponent implements OnInit {
     const authPages = ['/splash', '/onboarding', '/welcome', '/login', '/register', '/forgot-password', '/verify-email'];
     const onboardingPages = ['/goal', '/currency', '/income', '/notifications', '/ai-introduction'];
     const protectedPages = ['/home', '/dashboard', '/expenses', '/savings', '/budget', '/chat', '/profile'];
+    const isProtectedPage = protectedPages.some((path) => currentPath === path || currentPath.startsWith(`${path}/`));
 
     if (!emailVerified) {
       if (currentPath !== '/verify-email') {
@@ -69,7 +70,7 @@ export class AppComponent implements OnInit {
       return;
     }
 
-    if (protectedPages.includes(currentPath) || authPages.includes(currentPath) || currentPath === '/') {
+    if (isProtectedPage || authPages.includes(currentPath) || currentPath === '/') {
       await this.router.navigateByUrl(this.userPreferencesService.getNextOnboardingRoute(preferences));
     }
   }
