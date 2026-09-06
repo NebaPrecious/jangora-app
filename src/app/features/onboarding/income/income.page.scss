@@ -3,7 +3,7 @@ ion-header {
 }
 
 ion-toolbar {
-  --background: rgba(6, 20, 15, .55);
+  --background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(14px);
   --border-width: 0;
 }
@@ -13,12 +13,7 @@ ion-back-button {
 }
 
 .income-page {
-  --background: linear-gradient(
-    180deg,
-    #06140F 0%,
-    #081C15 45%,
-    #0B2D22 100%
-  );
+  --background: var(--app-background);
 }
 
 .container {
@@ -41,14 +36,14 @@ ion-progress-bar {
 }
 
 .title {
-  color: #FFFFFF;
+  color: var(--app-text-heading);
   font-size: 2rem;
   font-weight: 800;
   margin-bottom: 12px;
 }
 
 .subtitle {
-  color: rgba(255,255,255,.78);
+  color: var(--app-text-body);
   margin-bottom: 25px;
   line-height: 1.6;
 }
@@ -58,15 +53,15 @@ ion-progress-bar {
 }
 
 .income-card {
-  background: rgba(255,255,255,.08);
+  background: var(--app-glass-bg);
   padding: 18px;
   border-radius: 18px;
   margin-bottom: 14px;
-  border: 1px solid rgba(255,255,255,.12);
+  border: 1px solid var(--app-glass-border);
   cursor: pointer;
   transition: all .25s ease;
   backdrop-filter: blur(18px);
-  color: #FFFFFF;
+  color: var(--app-text-heading);
   font-weight: 600;
 }
 
@@ -76,14 +71,14 @@ ion-progress-bar {
 
 .income-card.selected {
   background: rgba(82,183,136,.22);
-  color: #FFFFFF;
+  color: var(--app-text-heading);
   border-color: #52B788;
   transform: scale(1.02);
   box-shadow: 0 15px 35px rgba(82,183,136,.25);
 }
 
 ion-footer {
-  background: rgba(6,20,15,.88);
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(16px);
 }
 

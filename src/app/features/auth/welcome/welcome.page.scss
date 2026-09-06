@@ -1,5 +1,5 @@
 .welcome-page {
-  --background: #F5F8FA;
+  --background: var(--app-background);
 }
 
 .welcome-container {
@@ -20,13 +20,13 @@
 .title {
   font-size: 2.3rem;
   font-weight: 800;
-  color: #1A3C5E;
+  color: var(--app-text-heading);
   margin-bottom: 12px;
 }
 
 .subtitle {
   font-size: 1rem;
-  color: #666666;
+  color: var(--app-text-body);
   margin-bottom: 40px;
   line-height: 1.6;
 }
@@ -48,7 +48,8 @@
 }
 
 .get-started-btn {
-  --background: #1A3C5E;
+  --background: linear-gradient(90deg, var(--ion-color-secondary), var(--ion-color-primary));
+  --color: #ffffff;
   --border-radius: 14px;
   height: 54px;
   font-size: 1rem;

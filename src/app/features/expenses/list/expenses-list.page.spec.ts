@@ -46,6 +46,7 @@ describe('ExpensesListPage', () => {
     expect(component.isLoading).toBeFalse();
     expect(component.expenses).toEqual([]);
     expect(component.summary?.totalSpentThisMonth).toBe(0);
+    expect(component.filters.view).toBe('');
   });
 
   it('sends search and filter values when filters change', async () => {
@@ -62,6 +63,6 @@ describe('ExpensesListPage', () => {
     component.addSavings();
 
     expect(router.navigateByUrl).toHaveBeenCalledWith('/expenses/add');
-    expect(router.navigateByUrl).toHaveBeenCalledWith('/savings');
+    expect(router.navigateByUrl).toHaveBeenCalledWith('/savings/add');
   });
 });

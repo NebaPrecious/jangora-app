@@ -47,7 +47,7 @@
   <ion-toolbar>
     <ion-button
       expand="block"
-      [disabled]="!selectedIncome"
+      [disabled]="!selectedIncome || isNavigating"
       (click)="continue()">
       Continue
     </ion-button>

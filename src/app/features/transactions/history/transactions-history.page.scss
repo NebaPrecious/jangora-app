@@ -1,0 +1,235 @@
+@use '../../../../theme/app-surfaces' as surfaces;
+
+.transactions-page {
+  --background: var(--app-background);
+  color: var(--app-text-heading);
+  position: relative;
+  overflow: hidden;
+}
+
+.glow {
+  @include surfaces.app-glow-blob;
+}
+
+.glow-one {
+  width: 260px;
+  height: 260px;
+  background: var(--ion-color-primary);
+  top: -110px;
+  right: -90px;
+}
+
+.glow-two {
+  width: 220px;
+  height: 220px;
+  background: var(--ion-color-secondary);
+  bottom: 120px;
+  left: -100px;
+}
+
+.transactions-container {
+  position: relative;
+  z-index: 2;
+  padding: 58px var(--app-space-sm) 150px;
+  max-width: 720px;
+  margin: auto;
+  animation: app-fade-up 360ms ease both;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: var(--app-space-sm);
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: var(--app-text-body);
+  font-size: 14px;
+}
+
+.page-header h1 {
+  margin: 0 0 8px;
+  color: var(--app-text-heading);
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.page-header p,
+.transaction-info p {
+  margin: 0;
+  color: var(--app-text-body);
+  line-height: 1.5;
+}
+
+.icon-button,
+.state-card button {
+  min-width: 48px;
+  min-height: 48px;
+  border: none;
+  color: var(--app-text-heading);
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease;
+}
+
+.icon-button {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--app-radius-md);
+  background: var(--app-glass-bg);
+  border: 1px solid var(--app-glass-border);
+}
+
+.segmented,
+.state-card,
+.transaction-row {
+  background: var(--app-glass-bg);
+  border: 1px solid var(--app-glass-border);
+  backdrop-filter: blur(var(--app-glass-blur));
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 10px;
+  border-radius: var(--app-radius-lg);
+  margin-bottom: var(--app-space-sm);
+}
+
+.segmented button {
+  min-height: 48px;
+  border-radius: var(--app-radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 800;
+}
+
+.segmented button.active {
+  background: rgba(var(--ion-color-primary-rgb), 0.2);
+  color: var(--ion-color-primary);
+  border-color: rgba(var(--ion-color-primary-rgb), 0.42);
+}
+
+.state-card {
+  padding: var(--app-space-md);
+  border-radius: var(--app-radius-lg);
+  text-align: center;
+  animation: app-card-enter 220ms ease-out both;
+}
+
+.state-card ion-icon,
+.state-card ion-spinner {
+  color: var(--ion-color-primary);
+  font-size: 34px;
+}
+
+.state-card h2 {
+  margin: 12px 0 8px;
+  color: var(--app-text-heading);
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.state-card p {
+  margin: 0;
+  color: var(--app-text-body);
+  line-height: 1.5;
+}
+
+.state-card.error {
+  border-color: rgba(var(--ion-color-danger-rgb), 0.3);
+  background: rgba(var(--ion-color-danger-rgb), 0.12);
+}
+
+.state-card button {
+  margin-top: 16px;
+  padding: 0 18px;
+  border-radius: var(--app-radius-md);
+  background: linear-gradient(135deg, var(--ion-color-secondary), var(--ion-color-primary));
+  font-weight: 800;
+}
+
+.transaction-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.transaction-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: var(--app-space-sm);
+  border-radius: var(--app-radius-lg);
+  color: var(--app-text-heading);
+  text-align: left;
+  animation: app-list-enter 220ms ease-out both;
+  transition: transform 160ms ease, border-color 160ms ease;
+}
+
+.transaction-icon {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: var(--app-radius-sm);
+  background: rgba(var(--ion-color-danger-rgb), 0.14);
+  color: var(--ion-color-danger);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.transaction-row.savings .transaction-icon {
+  background: rgba(var(--ion-color-primary-rgb), 0.14);
+  color: var(--ion-color-primary);
+}
+
+.transaction-info {
+  min-width: 0;
+  flex: 1;
+  display: block;
+}
+
+.transaction-info h2 {
+  margin: 0 0 5px;
+  color: var(--app-text-heading);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.transaction-info p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.transaction-row strong {
+  color: var(--ion-color-danger);
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.transaction-row.savings strong {
+  color: var(--ion-color-success);
+}
+
+.chevron {
+  color: var(--app-text-caption);
+  font-size: 18px;
+}
+
+.icon-button:active,
+.segmented button:active,
+.transaction-row:active,
+.state-card button:active {
+  transform: scale(0.96);
+}

@@ -1,0 +1,76 @@
+// Shared visual patterns reused across dashboard/expenses/savings pages.
+// Consumed via `@use '.../theme/app-surfaces' as surfaces;` - each page keeps
+// its own class names, this only supplies the repeated rule bodies/keyframes
+// so they have one canonical definition instead of being copy-pasted per file.
+
+@mixin app-glow-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(110px);
+  opacity: 0.22;
+  pointer-events: none;
+}
+
+@mixin app-state-card-base {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--app-space-xs);
+  padding: var(--app-space-md);
+  border-radius: var(--app-radius-lg);
+  background: var(--app-glass-bg);
+  border: 1px solid var(--app-glass-border);
+  backdrop-filter: blur(var(--app-glass-blur));
+  text-align: center;
+  color: var(--app-text-body);
+}
+
+@mixin app-state-card-error {
+  background: rgba(var(--ion-color-danger-rgb), 0.14);
+  border-color: rgba(var(--ion-color-danger-rgb), 0.35);
+  color: var(--ion-color-danger);
+}
+
+@keyframes app-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes app-card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes app-selector-open {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes app-list-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

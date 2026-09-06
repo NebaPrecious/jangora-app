@@ -126,5 +126,15 @@
       <ion-icon name="log-out-outline"></ion-icon>
       <span>Logout</span>
     </button>
+
+    <button
+      type="button"
+      class="delete-account-btn"
+      (click)="confirmDeleteAccount()"
+      [disabled]="isDeletingAccount">
+      <ion-icon name="trash-outline"></ion-icon>
+      <span *ngIf="!isDeletingAccount">Delete Account</span>
+      <span *ngIf="isDeletingAccount">Deleting account...</span>
+    </button>
   </div>
 </ion-content>

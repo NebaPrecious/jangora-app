@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { NavigationFocusService } from '../../../core/services/navigation-focus.service';
 
 import {
   IonContent,
@@ -35,6 +36,7 @@ import {
 export class GoalPage {
 
   selectedGoals: string[] = [];
+  isNavigating = false;
 
   goals = [
     '💰 Save More',
@@ -45,7 +47,10 @@ export class GoalPage {
     '🚀 Increase My Income'
   ];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private readonly navigationFocusService: NavigationFocusService,
+  ) {}
 
   toggleGoal(goal: string) {
     const index = this.selectedGoals.indexOf(goal);
@@ -61,8 +66,11 @@ export class GoalPage {
     return this.selectedGoals.includes(goal);
   }
 
-  continue() {
+  async continue() {
+    if (this.isNavigating || this.selectedGoals.length === 0) return;
+    this.isNavigating = true;
+    this.navigationFocusService.blurActiveElement();
     localStorage.setItem('primaryGoals', JSON.stringify(this.selectedGoals));
-    this.router.navigateByUrl('/currency');
+    await this.router.navigateByUrl('/currency');
   }
 }

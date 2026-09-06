@@ -55,4 +55,28 @@ describe('UserPreferencesService', () => {
       onboardingCompleted: true,
     });
   });
+
+  it('should retry a transient preference save once before succeeding', async () => {
+    const payload = service.buildOnboardingPayload(true);
+    const promise = service.saveMyPreferences(payload);
+
+    const firstRequest = httpMock.expectOne('http://localhost:3000/user-preferences/me');
+    expect(firstRequest.request.method).toBe('PUT');
+    firstRequest.flush({}, { status: 503, statusText: 'Service Unavailable' });
+
+    await new Promise((resolve) => setTimeout(resolve, 400));
+
+    const retryRequest = httpMock.expectOne('http://localhost:3000/user-preferences/me');
+    expect(retryRequest.request.method).toBe('PUT');
+    retryRequest.flush({
+      id: 'pref-id',
+      primaryGoals: [],
+      preferredCurrency: 'XAF',
+      incomeRange: null,
+      notificationPreferences: [],
+      onboardingCompleted: true,
+    });
+
+    await expectAsync(promise).toBeResolvedTo(jasmine.objectContaining({ onboardingCompleted: true }));
+  });
 });

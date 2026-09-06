@@ -1,0 +1,86 @@
+<ion-header class="savings-header">
+  <ion-toolbar>
+    <ion-buttons slot="start"><ion-back-button defaultHref="/savings" text=""></ion-back-button></ion-buttons>
+    <ion-title>Savings Goal</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="savings-detail-page">
+  <div class="glow glow-one" aria-hidden="true"></div>
+  <div class="glow glow-two" aria-hidden="true"></div>
+
+  <main class="detail-container">
+    <div class="state-card loading" *ngIf="isLoading" aria-live="polite" aria-busy="true">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading savings goal...</p>
+    </div>
+
+    <div class="state-card error" *ngIf="!isLoading && errorMessage" aria-live="polite">
+      <p>{{ errorMessage }}</p>
+      <button type="button" (click)="loadGoal(false)">Try again</button>
+    </div>
+
+    <ng-container *ngIf="!isLoading && !errorMessage && goal">
+      <section class="hero-card">
+        <p>{{ goal.isCompleted ? 'Completed goal' : 'Active goal' }}</p>
+        <h1>{{ goal.name }}</h1>
+        <strong>{{ formatMoney(goal.currentAmount) }}</strong>
+        <span>{{ progressPercent() }}% saved · {{ formatMoney(remaining()) }} remaining</span>
+        <ion-progress-bar [value]="progress()" color="success"></ion-progress-bar>
+      </section>
+
+      <section class="info-grid">
+        <div><span>Target</span><strong>{{ formatMoney(goal.targetAmount) }}</strong></div>
+        <div><span>Target date</span><strong>{{ formatDate(goal.targetDate) }}</strong></div>
+        <div><span>Status</span><strong>{{ goal.isCompleted ? 'Complete' : 'In progress' }}</strong></div>
+        <div><span>Updated</span><strong>{{ formatDate(goal.updatedAt) }}</strong></div>
+      </section>
+
+      <div class="actions">
+        <button type="button" class="primary" (click)="addSavings()"><ion-icon name="add-outline" aria-hidden="true"></ion-icon>Add Savings</button>
+        <button type="button" class="secondary" (click)="editGoal()"><ion-icon name="create-outline" aria-hidden="true"></ion-icon>Edit</button>
+        <button
+          type="button"
+          class="secondary"
+          (click)="completeGoal()"
+          [disabled]="goal.isCompleted || isCompleting"
+          [attr.aria-busy]="isCompleting">
+          <ion-spinner name="crescent" *ngIf="isCompleting" aria-hidden="true"></ion-spinner>
+          <ion-icon name="checkmark-circle-outline" *ngIf="!isCompleting" aria-hidden="true"></ion-icon>
+          Complete
+        </button>
+        <button
+          type="button"
+          class="danger"
+          (click)="confirmDelete()"
+          [disabled]="isDeleting"
+          [attr.aria-busy]="isDeleting"
+          [attr.aria-label]="isDeleting ? 'Deleting goal' : null">
+          <ion-spinner name="crescent" *ngIf="isDeleting" aria-hidden="true"></ion-spinner>
+          <ion-icon name="trash-outline" *ngIf="!isDeleting" aria-hidden="true"></ion-icon>
+          <span *ngIf="!isDeleting">Delete</span>
+        </button>
+      </div>
+
+      <section class="activity-card">
+        <h2>Recent deposits</h2>
+        <ul class="activity-list">
+          <li class="activity-row muted" *ngIf="deposits.length === 0">
+            <span class="activity-icon"><ion-icon name="wallet-outline" aria-hidden="true"></ion-icon></span>
+            <div>
+              <h3>No deposits yet</h3>
+              <p>Add savings and they will appear here.</p>
+            </div>
+          </li>
+          <li class="activity-row" *ngFor="let deposit of deposits; trackBy: trackByEntryId">
+            <span class="activity-icon"><ion-icon name="wallet-outline" aria-hidden="true"></ion-icon></span>
+            <div>
+              <h3>{{ formatMoney(deposit.amount, deposit.currency) }}</h3>
+              <p>{{ formatDate(deposit.date) }}{{ deposit.note ? ' · ' + deposit.note : '' }}</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </ng-container>
+  </main>
+</ion-content>

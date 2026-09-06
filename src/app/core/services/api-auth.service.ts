@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, timeout } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { API_BASE_URL } from '../api/api.config';
+import { retryTransient, toFriendlyNetworkError } from '../errors/network-error.util';
 
 export interface BackendUser {
   id: string;
@@ -33,6 +34,7 @@ export interface FirebaseLoginResponse {
 })
 export class ApiAuthService {
   private readonly apiBaseUrl = API_BASE_URL;
+  private readonly requestTimeoutMs = 12000;
 
   constructor(
     private readonly http: HttpClient,
@@ -46,25 +48,31 @@ export class ApiAuthService {
         throw new Error('No Firebase ID token available');
       }
 
-      const response = await firstValueFrom(
-        this.http.post<FirebaseLoginResponse>(
+      const response = await retryTransient(() =>
+        firstValueFrom(this.http.post<FirebaseLoginResponse>(
           `${this.apiBaseUrl}/auth/firebase-login`,
           { idToken },
-        ),
+        ).pipe(timeout(this.requestTimeoutMs))),
       );
 
       return response.user;
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Failed to synchronize user with backend';
-      throw new Error(`User sync failed: ${errorMessage}`);
+      throw toFriendlyNetworkError(error, 'We could not sync your account. Please try again.');
     }
   }
 
   async getCurrentUser(): Promise<BackendUser> {
-    return firstValueFrom(
-      this.http.get<BackendUser>(`${this.apiBaseUrl}/users/me`),
-    );
+    try {
+      return await retryTransient(() =>
+        firstValueFrom(this.http.get<BackendUser>(`${this.apiBaseUrl}/users/me`).pipe(timeout(this.requestTimeoutMs))),
+      );
+    } catch (error) {
+      if (error instanceof HttpErrorResponse && error.status === 404) {
+        throw error;
+      }
+
+      throw toFriendlyNetworkError(error, 'We could not load your account. Please try again.');
+    }
   }
 
   async restoreBackendUser(): Promise<BackendUser> {
@@ -83,5 +91,15 @@ export class ApiAuthService {
     return firstValueFrom(
       this.http.patch<BackendUser>(`${this.apiBaseUrl}/users/me`, payload),
     );
+  }
+
+  async deleteCurrentUser(): Promise<void> {
+    try {
+      await retryTransient(() =>
+        firstValueFrom(this.http.delete<void>(`${this.apiBaseUrl}/users/me`).pipe(timeout(this.requestTimeoutMs))),
+      );
+    } catch (error) {
+      throw toFriendlyNetworkError(error, 'We could not delete your account. Please try again.');
+    }
   }
 }

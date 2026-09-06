@@ -1,0 +1,210 @@
+@use '../../../../theme/app-surfaces' as surfaces;
+
+.savings-header ion-toolbar {
+  --background: rgba(6, 20, 15, 0.72);
+  --color: #ffffff;
+  --border-width: 0;
+  backdrop-filter: blur(14px);
+}
+
+.savings-header ion-back-button {
+  --color: var(--ion-color-primary);
+}
+
+.savings-form-page {
+  --background: var(--app-background);
+  color: var(--app-text-heading);
+}
+
+.savings-form-page :is(p, span, h1, h2, h3, strong, label, button, input, textarea) {
+  color: var(--app-text-heading);
+}
+
+.glow {
+  @include surfaces.app-glow-blob;
+  opacity: 0.2;
+}
+
+.glow-one {
+  width: 240px;
+  height: 240px;
+  background: var(--ion-color-primary);
+  top: -100px;
+  right: -90px;
+}
+
+.glow-two {
+  width: 220px;
+  height: 220px;
+  background: var(--ion-color-secondary);
+  bottom: 120px;
+  left: -100px;
+}
+
+.form-container {
+  position: relative;
+  z-index: 2;
+  max-width: 680px;
+  margin: auto;
+  padding: var(--app-space-lg) var(--app-space-sm) 48px;
+  animation: app-fade-up 360ms ease both;
+}
+
+.form-intro {
+  margin-bottom: var(--app-space-md);
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  font-size: 14px;
+}
+
+.form-intro h1 {
+  margin: 0 0 8px;
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.form-intro p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.form-card,
+.state-card {
+  padding: var(--app-space-sm);
+  border-radius: var(--app-radius-lg);
+  background: var(--app-glass-bg-strong);
+  border: 1px solid var(--app-glass-border);
+  backdrop-filter: blur(var(--app-glass-blur));
+  box-shadow: var(--app-shadow-card);
+  animation: card-enter 280ms ease-out both;
+}
+
+.field {
+  min-height: 62px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  border-radius: var(--app-radius-md);
+  background: rgba(3, 17, 12, 0.32);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.field:focus-within {
+  background: rgba(3, 17, 12, 0.46);
+  border-color: var(--ion-color-primary-tint);
+  box-shadow: var(--app-focus-ring);
+}
+
+.field + .field,
+.option-field {
+  margin-top: 12px;
+}
+
+input,
+.option-trigger {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--app-text-heading);
+  font: inherit;
+  font-weight: 800;
+  text-align: left;
+}
+
+input::placeholder {
+  color: var(--app-text-heading);
+}
+
+.option-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+  animation: app-selector-open 180ms ease-out both;
+}
+
+.option-list button {
+  min-height: 44px;
+  border-radius: var(--app-radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(3, 17, 12, 0.46);
+  color: var(--app-text-heading);
+  font-weight: 800;
+  text-align: left;
+  padding: 0 12px;
+}
+
+.option-list button.selected {
+  border-color: var(--ion-color-primary);
+  background: rgba(var(--ion-color-primary-rgb), 0.2);
+  color: var(--app-text-heading);
+}
+
+.error-message {
+  margin: 14px 0 0;
+  color: var(--ion-color-danger);
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 12px;
+  margin-top: var(--app-space-sm);
+}
+
+.actions button {
+  min-height: 52px;
+  border-radius: var(--app-radius-md);
+  font-weight: 900;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.actions button:active {
+  transform: scale(0.98);
+}
+
+.actions button:disabled {
+  opacity: 0.62;
+}
+
+.secondary {
+  color: var(--app-text-heading);
+  background: rgba(255, 255, 255, 0.13);
+  border: 1px solid rgba(255, 255, 255, 0.26);
+}
+
+.primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--app-text-heading);
+  background: linear-gradient(135deg, var(--ion-color-secondary), var(--ion-color-primary));
+  box-shadow: 0 10px 24px rgba(6, 20, 15, 0.32);
+  border: 0;
+}
+
+.state-card {
+  text-align: center;
+}
+
+.state-card ion-spinner {
+  color: var(--ion-color-primary);
+}
+
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

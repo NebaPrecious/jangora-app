@@ -1,11 +1,11 @@
 <ion-content [fullscreen]="true" class="home-page">
 
-  <div class="glow glow-one"></div>
-  <div class="glow glow-two"></div>
+  <div class="glow glow-one" aria-hidden="true"></div>
+  <div class="glow glow-two" aria-hidden="true"></div>
 
-  <div class="home-container">
+  <main class="home-container">
 
-    <div class="top-bar">
+    <header class="top-bar">
 
       <div>
         <p class="hello">Good morning</p>
@@ -13,18 +13,18 @@
       </div>
 
       <div class="top-actions">
-        <button type="button" class="profile-btn" (click)="goToProfile()">
-          <span>P</span>
+        <button type="button" class="profile-btn" aria-label="Open profile" (click)="goToProfile()">
+          <span aria-hidden="true">P</span>
         </button>
 
-        <button type="button" class="notification-btn">
-          <ion-icon name="notifications-outline"></ion-icon>
+        <button type="button" class="notification-btn" aria-label="Notifications">
+          <ion-icon name="notifications-outline" aria-hidden="true"></ion-icon>
         </button>
       </div>
 
-    </div>
+    </header>
 
-    <div class="balance-card">
+    <section class="balance-card">
 
       <div class="balance-top">
         <p>Total Balance</p>
@@ -37,7 +37,7 @@
         Balance starts at zero until income, savings, or an opening balance is added.
       </p>
 
-    </div>
+    </section>
 
     <div class="quick-actions">
 
@@ -46,115 +46,139 @@
         class="quick-action"
         *ngFor="let action of quickActions"
         (click)="handleQuickAction(action.action)">
-        <div class="quick-icon">
-          <ion-icon [name]="action.icon"></ion-icon>
-        </div>
+        <span class="quick-icon">
+          <ion-icon [name]="action.icon" aria-hidden="true"></ion-icon>
+        </span>
         <span>{{ action.label }}</span>
       </button>
 
     </div>
 
-    <div class="month-card">
+    <section class="month-card">
 
       <div class="card-header">
         <div>
           <p>This Month</p>
-          <h3>Spending vs Budget</h3>
+          <h3>{{ hasBudget ? 'Spending vs Budget' : 'Spending so far' }}</h3>
         </div>
 
-        <ion-icon name="trending-up-outline"></ion-icon>
+        <ion-icon name="trending-up-outline" aria-hidden="true"></ion-icon>
       </div>
 
-      <div class="budget-row">
+      <ng-container *ngIf="hasBudget; else noBudget">
+        <div class="budget-row">
 
-        <div>
-          <span>Spent</span>
-          <strong>{{ formatMoney(monthlySpent) }}</strong>
+          <div>
+            <span>Spent</span>
+            <strong>{{ formatMoney(monthlySpent) }}</strong>
+          </div>
+
+          <div>
+            <span>Budget Left</span>
+            <strong>{{ formatMoney(budgetLeft) }}</strong>
+          </div>
+
         </div>
 
-        <div>
-          <span>Budget Left</span>
-          <strong>{{ formatMoney(budgetLeft) }}</strong>
+        <ion-progress-bar
+          [value]="budgetUsedPercentage"
+          color="primary">
+        </ion-progress-bar>
+      </ng-container>
+
+      <ng-template #noBudget>
+        <div class="budget-row single">
+          <div>
+            <span>Spent</span>
+            <strong>{{ formatMoney(monthlySpent) }}</strong>
+          </div>
         </div>
+        <p class="empty-hint">Set a monthly budget to see how your spending compares as you go.</p>
+        <button type="button" class="ghost-action" (click)="handleQuickAction('view-budget')">
+          Set a budget
+        </button>
+      </ng-template>
 
-      </div>
+    </section>
 
-      <ion-progress-bar
-        [value]="budgetUsedPercentage"
-        color="success">
-      </ion-progress-bar>
-
-    </div>
-
-    <div class="savings-card">
+    <section class="savings-card">
 
       <div>
         <p>Savings Progress</p>
-        <h3>{{ savingsProgress }}%</h3>
+        <h3>{{ isSavingsDataLoading ? 'Loading...' : formatMoney(totalSaved) }}</h3>
+        <span *ngIf="!isSavingsDataLoading && closestSavingsGoal">
+          {{ closestSavingsGoal.name }} · {{ savingsProgress }}%
+        </span>
+        <span *ngIf="!isSavingsDataLoading && !closestSavingsGoal && !savingsDataError">
+          Create a savings goal to track progress here.
+        </span>
+        <span *ngIf="!isSavingsDataLoading && savingsDataError">
+          {{ savingsDataError }}
+        </span>
       </div>
 
       <ion-progress-bar
         [value]="savingsProgress / 100"
-        color="success">
+        color="primary">
       </ion-progress-bar>
 
-    </div>
+    </section>
 
-    <div class="ai-nudge">
+    <section class="ai-nudge">
 
-      <div class="ai-icon">
-        <ion-icon name="sparkles-outline"></ion-icon>
-      </div>
+      <span class="ai-icon">
+        <ion-icon name="sparkles-outline" aria-hidden="true"></ion-icon>
+      </span>
 
       <div>
         <h3>Daily AI Nudge</h3>
         <p>Add your first transaction and Jangora will start giving smarter financial tips.</p>
       </div>
 
-    </div>
+    </section>
 
     <div class="section-title">
 
       <h3>Recent Transactions</h3>
 
-      <span (click)="viewAllExpenses()" role="button" tabindex="0">
+      <button type="button" class="view-all" (click)="viewAllTransactions()">
         View all
-        <ion-icon name="chevron-forward-outline"></ion-icon>
-      </span>
+        <ion-icon name="chevron-forward-outline" aria-hidden="true"></ion-icon>
+      </button>
 
     </div>
 
-    <div class="transactions">
+    <ul class="transactions" aria-live="polite">
 
-      <div class="transaction muted" *ngIf="isExpenseDataLoading">
-        <div class="transaction-dot"></div>
+      <li class="transaction muted" *ngIf="isExpenseDataLoading" aria-busy="true">
+        <span class="transaction-dot" aria-hidden="true"></span>
         <div class="transaction-info">
           <h4>Loading transactions</h4>
           <p>Getting your latest expenses...</p>
         </div>
-      </div>
+      </li>
 
-      <div class="transaction muted" *ngIf="!isExpenseDataLoading && expenseDataError">
-        <div class="transaction-dot"></div>
+      <li class="transaction muted" *ngIf="!isExpenseDataLoading && expenseDataError">
+        <span class="transaction-dot" aria-hidden="true"></span>
         <div class="transaction-info">
           <h4>Expenses unavailable</h4>
           <p>{{ expenseDataError }}</p>
         </div>
-      </div>
+      </li>
 
-      <div class="transaction muted" *ngIf="!isExpenseDataLoading && !expenseDataError && recentTransactions.length === 0">
-        <div class="transaction-dot"></div>
+      <li class="transaction muted" *ngIf="!isExpenseDataLoading && !expenseDataError && recentTransactions.length === 0">
+        <span class="transaction-dot" aria-hidden="true"></span>
         <div class="transaction-info">
           <h4>No expenses yet</h4>
           <p>Add your first expense to see it here.</p>
         </div>
-      </div>
+      </li>
 
-      <div
+      <li
         class="transaction"
         *ngFor="let item of recentTransactions">
 
-        <div class="transaction-dot"></div>
+        <span class="transaction-dot" aria-hidden="true"></span>
 
         <div class="transaction-info">
           <h4>{{ item.category }}</h4>
@@ -163,22 +187,22 @@
 
         <strong>-{{ formatMoney(+item.amount) }}</strong>
 
-      </div>
+      </li>
 
-    </div>
+    </ul>
 
-  </div>
+  </main>
 
 </ion-content>
 
 <div class="floating-actions">
 
-  <button class="fab-secondary" (click)="handleQuickAction('add-savings')">
-    <ion-icon name="add-outline"></ion-icon>
+  <button class="fab-secondary" aria-label="Add savings" (click)="handleQuickAction('add-savings')">
+    <ion-icon name="add-outline" aria-hidden="true"></ion-icon>
   </button>
 
-  <button class="fab-main" (click)="handleQuickAction('add-expense')">
-    <ion-icon name="remove-outline"></ion-icon>
+  <button class="fab-main" aria-label="Add expense" (click)="handleQuickAction('add-expense')">
+    <ion-icon name="remove-outline" aria-hidden="true"></ion-icon>
   </button>
 
 </div>

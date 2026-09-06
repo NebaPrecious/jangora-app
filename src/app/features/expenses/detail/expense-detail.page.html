@@ -8,26 +8,26 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="expense-detail-page">
-  <div class="glow glow-one"></div>
-  <div class="glow glow-two"></div>
+  <div class="glow glow-one" aria-hidden="true"></div>
+  <div class="glow glow-two" aria-hidden="true"></div>
 
-  <div class="detail-container">
-    <div class="state-card" *ngIf="isLoading">
+  <main class="detail-container">
+    <div class="state-card" *ngIf="isLoading" aria-live="polite" aria-busy="true">
       <ion-spinner name="crescent"></ion-spinner>
       <p>Loading expense...</p>
     </div>
 
-    <div class="state-card error" *ngIf="!isLoading && errorMessage && !expense">
+    <div class="state-card error" *ngIf="!isLoading && errorMessage && !expense" aria-live="polite">
       <p>{{ errorMessage }}</p>
       <button type="button" (click)="loadExpense()">Try again</button>
     </div>
 
     <ng-container *ngIf="!isLoading && expense">
-      <div class="hero-card">
+      <section class="hero-card">
         <p>{{ expense.category }}</p>
         <h1>{{ formatMoney(expense.amount, expense.currency) }}</h1>
         <span>{{ formatDateTime(expense.date) }}</span>
-      </div>
+      </section>
 
       <div class="detail-grid">
         <div class="detail-card">
@@ -64,19 +64,25 @@
         </div>
       </div>
 
-      <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <p class="error-message" *ngIf="errorMessage" aria-live="polite">{{ errorMessage }}</p>
 
       <div class="action-row">
         <button type="button" class="secondary-button" (click)="editExpense()" [disabled]="isDeleting">
-          <ion-icon name="create-outline"></ion-icon>
+          <ion-icon name="create-outline" aria-hidden="true"></ion-icon>
           Edit
         </button>
-        <button type="button" class="danger-button" (click)="confirmDelete()" [disabled]="isDeleting">
-          <ion-spinner *ngIf="isDeleting" name="crescent"></ion-spinner>
-          <ion-icon *ngIf="!isDeleting" name="trash-outline"></ion-icon>
+        <button
+          type="button"
+          class="danger-button"
+          (click)="confirmDelete()"
+          [disabled]="isDeleting"
+          [attr.aria-busy]="isDeleting"
+          [attr.aria-label]="isDeleting ? 'Deleting expense' : null">
+          <ion-spinner *ngIf="isDeleting" name="crescent" aria-hidden="true"></ion-spinner>
+          <ion-icon *ngIf="!isDeleting" name="trash-outline" aria-hidden="true"></ion-icon>
           <span *ngIf="!isDeleting">Delete</span>
         </button>
       </div>
     </ng-container>
-  </div>
+  </main>
 </ion-content>

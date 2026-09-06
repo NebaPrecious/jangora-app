@@ -1,3 +1,5 @@
+@use '../../../../theme/app-surfaces' as surfaces;
+
 .jangora-header {
   --background: transparent;
 }
@@ -10,28 +12,24 @@
 }
 
 .jangora-header ion-back-button {
-  --color: #52b788;
+  --color: var(--ion-color-primary);
 }
 
 .expense-detail-page {
-  --background: linear-gradient(180deg, #06140f 0%, #081c15 45%, #0b2d22 100%);
-  color: #ffffff;
+  --background: var(--app-background);
+  color: var(--app-text-heading);
   position: relative;
   overflow: hidden;
 }
 
 .glow {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(110px);
-  opacity: 0.22;
-  pointer-events: none;
+  @include surfaces.app-glow-blob;
 }
 
 .glow-one {
   width: 240px;
   height: 240px;
-  background: #52b788;
+  background: var(--ion-color-primary);
   top: -100px;
   right: -90px;
 }
@@ -39,7 +37,7 @@
 .glow-two {
   width: 210px;
   height: 210px;
-  background: #40916c;
+  background: var(--ion-color-secondary);
   bottom: 80px;
   left: -100px;
 }
@@ -47,10 +45,10 @@
 .detail-container {
   position: relative;
   z-index: 2;
-  padding: 32px 22px 56px;
+  padding: var(--app-space-lg) var(--app-space-sm) 56px;
   max-width: 720px;
   margin: auto;
-  animation: fade-up 340ms ease both;
+  animation: app-fade-up 340ms ease both;
 }
 
 .hero-card,
@@ -58,20 +56,20 @@
 .note-card,
 .timeline-card,
 .state-card {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 26px;
-  backdrop-filter: blur(18px);
-  animation: card-enter 220ms ease-out both;
+  background: var(--app-glass-bg);
+  border: 1px solid var(--app-glass-border);
+  border-radius: var(--app-radius-lg);
+  backdrop-filter: blur(var(--app-glass-blur));
+  animation: app-card-enter 220ms ease-out both;
 }
 
 .hero-card {
-  padding: 26px;
-  margin-bottom: 16px;
+  padding: var(--app-space-md);
+  margin-bottom: var(--app-space-sm);
   background:
-    radial-gradient(circle at top right, rgba(233, 196, 106, 0.18), transparent 34%),
-    linear-gradient(135deg, rgba(82, 183, 136, 0.24), rgba(255, 255, 255, 0.07));
-  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.24);
+    radial-gradient(circle at top right, rgba(var(--app-color-gold-rgb), 0.18), transparent 34%),
+    linear-gradient(135deg, rgba(var(--ion-color-primary-rgb), 0.24), rgba(255, 255, 255, 0.07));
+  box-shadow: var(--app-shadow-card);
 }
 
 .hero-card p,
@@ -79,7 +77,7 @@
 .detail-card span,
 .note-card span,
 .timeline-card span {
-  color: rgba(255, 255, 255, 0.64);
+  color: var(--app-text-body);
 }
 
 .hero-card p {
@@ -89,7 +87,7 @@
 
 .hero-card h1 {
   margin: 0 0 10px;
-  color: #ffffff;
+  color: var(--app-text-heading);
   font-size: 36px;
   font-weight: 900;
 }
@@ -98,30 +96,31 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
-  margin-bottom: 16px;
+  margin-bottom: var(--app-space-sm);
 }
 
 .detail-card,
 .note-card,
 .timeline-card {
-  padding: 16px;
+  padding: var(--app-space-sm);
 }
 
 .detail-card strong,
 .timeline-card strong {
   display: block;
   margin-top: 8px;
-  color: #ffffff;
+  color: var(--app-text-heading);
   font-weight: 800;
 }
 
 .note-card {
-  margin-bottom: 16px;
+  margin-bottom: var(--app-space-sm);
 }
 
 .note-card p {
   margin: 8px 0 0;
-  color: rgba(255, 255, 255, 0.84);
+  color: var(--app-text-heading);
+  opacity: 0.84;
   line-height: 1.5;
 }
 
@@ -129,7 +128,7 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 14px;
-  margin-bottom: 18px;
+  margin-bottom: var(--app-space-sm);
 }
 
 .action-row {
@@ -142,7 +141,7 @@
 .danger-button,
 .state-card button {
   min-height: 56px;
-  border-radius: 18px;
+  border-radius: var(--app-radius-md);
   border: none;
   font-weight: 900;
   transition: transform 160ms ease, opacity 160ms ease;
@@ -150,15 +149,15 @@
 
 .secondary-button,
 .state-card button {
-  background: linear-gradient(90deg, #40916c, #52b788);
-  color: #ffffff;
-  box-shadow: 0 10px 30px rgba(82, 183, 136, 0.25);
+  background: linear-gradient(90deg, var(--ion-color-secondary), var(--ion-color-primary));
+  color: var(--app-text-heading);
+  box-shadow: 0 10px 30px rgba(var(--ion-color-primary-rgb), 0.25);
 }
 
 .danger-button {
-  background: rgba(231, 76, 60, 0.16);
-  color: #ffffff;
-  border: 1px solid rgba(231, 76, 60, 0.28);
+  background: rgba(var(--ion-color-danger-rgb), 0.16);
+  color: var(--app-text-heading);
+  border: 1px solid rgba(var(--ion-color-danger-rgb), 0.32);
 }
 
 button ion-icon {
@@ -167,13 +166,18 @@ button ion-icon {
 }
 
 .state-card {
-  padding: 26px;
+  padding: var(--app-space-md);
   text-align: center;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--app-text-body);
+}
+
+.state-card.error {
+  border-color: rgba(var(--ion-color-danger-rgb), 0.3);
+  background: rgba(var(--ion-color-danger-rgb), 0.12);
 }
 
 .error-message {
-  color: #ff8a80;
+  color: var(--ion-color-danger);
   font-weight: 700;
 }
 
@@ -188,27 +192,5 @@ button ion-icon {
 @media (min-width: 620px) {
   .timeline-card {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes card-enter {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }

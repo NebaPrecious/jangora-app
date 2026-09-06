@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { NavigationFocusService } from '../../../core/services/navigation-focus.service';
 
 import {
   IonContent,
@@ -38,6 +39,7 @@ export class CurrencyPage {
 
   selectedCurrency = '';
   currencySearch = '';
+  isNavigating = false;
 
   currencies = [
     { code: 'XAF', name: 'Central African CFA Franc' },
@@ -59,7 +61,10 @@ export class CurrencyPage {
 
   filteredCurrencies = [...this.currencies];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private readonly navigationFocusService: NavigationFocusService,
+  ) {}
 
   filterCurrencies() {
     const search = this.currencySearch.toLowerCase();
@@ -74,8 +79,11 @@ export class CurrencyPage {
     this.selectedCurrency = code;
   }
 
-  continue() {
+  async continue() {
+    if (this.isNavigating || !this.selectedCurrency) return;
+    this.isNavigating = true;
+    this.navigationFocusService.blurActiveElement();
     localStorage.setItem('currency', this.selectedCurrency);
-    this.router.navigateByUrl('/income');
+    await this.router.navigateByUrl('/income');
   }
 }

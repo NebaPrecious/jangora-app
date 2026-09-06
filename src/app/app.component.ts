@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
-import { AuthService } from './core/auth/auth.service';
-import { ApiAuthService } from './core/services/api-auth.service';
-import { UserStateService } from './core/services/user-state.service';
 import { BackendUserPreferences, UserPreferencesService } from './core/services/user-preferences.service';
+import { isTransientNetworkError } from './core/errors/network-error.util';
+import { SessionRestoreService } from './core/services/session-restore.service';
 
 @Component({
   selector: 'app-root',
@@ -14,9 +13,7 @@ import { BackendUserPreferences, UserPreferencesService } from './core/services/
 })
 export class AppComponent implements OnInit {
   constructor(
-    private readonly authService: AuthService,
-    private readonly apiAuthService: ApiAuthService,
-    private readonly userStateService: UserStateService,
+    private readonly sessionRestoreService: SessionRestoreService,
     private readonly userPreferencesService: UserPreferencesService,
     private readonly router: Router,
   ) {}
@@ -26,22 +23,20 @@ export class AppComponent implements OnInit {
   }
 
   private async restoreUserSession(): Promise<void> {
-    const firebaseUser = await this.authService.waitForAuthReady();
-
-    if (!firebaseUser) {
-      this.userStateService.clearUser();
-      this.userPreferencesService.clearPreferences();
-      return;
-    }
-
     try {
-      const backendUser = await this.apiAuthService.restoreBackendUser();
-      this.userStateService.setUser(backendUser);
-      const preferences = await this.userPreferencesService.getMyPreferences();
+      const { firebaseUser, preferences } = await this.sessionRestoreService.restoreAuthenticatedSession();
+
+      if (!firebaseUser || !preferences) {
+        return;
+      }
+
       await this.routeAfterSessionRestore(firebaseUser.emailVerified, preferences);
     } catch (error: unknown) {
-      this.userStateService.clearUser();
-      this.userPreferencesService.clearPreferences();
+      if (isTransientNetworkError(error)) {
+        console.warn('Backend session restore temporarily unavailable.');
+        return;
+      }
+
       console.warn('Unable to restore backend user session:', error);
     }
   }
@@ -53,7 +48,7 @@ export class AppComponent implements OnInit {
     const currentPath = this.router.url.split('?')[0];
     const authPages = ['/splash', '/onboarding', '/welcome', '/login', '/register', '/forgot-password', '/verify-email'];
     const onboardingPages = ['/goal', '/currency', '/income', '/notifications', '/ai-introduction'];
-    const protectedPages = ['/home', '/dashboard', '/expenses', '/savings', '/budget', '/chat', '/profile'];
+    const protectedPages = ['/home', '/dashboard', '/expenses', '/transactions', '/savings', '/budget', '/chat', '/profile'];
     const isProtectedPage = protectedPages.some((path) => currentPath === path || currentPath.startsWith(`${path}/`));
 
     if (!emailVerified) {

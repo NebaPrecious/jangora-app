@@ -1,0 +1,77 @@
+<ion-header class="savings-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/savings" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ isEditMode ? 'Edit Goal' : 'Create Goal' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="savings-form-page">
+  <div class="glow glow-one" aria-hidden="true"></div>
+  <div class="glow glow-two" aria-hidden="true"></div>
+
+  <form class="form-container" (ngSubmit)="save()">
+    <div class="form-intro">
+      <p class="eyebrow">Savings</p>
+      <h1>{{ isEditMode ? 'Update your goal' : 'Create a savings goal' }}</h1>
+      <p>Make the target clear so progress feels easy to follow.</p>
+    </div>
+
+    <div class="state-card loading" *ngIf="isLoading" aria-live="polite" aria-busy="true">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading savings goal...</p>
+    </div>
+
+    <div class="form-card" *ngIf="!isLoading">
+      <label class="field">
+        <span>Goal name</span>
+        <input name="name" type="text" [(ngModel)]="form.name" placeholder="Emergency fund" />
+      </label>
+
+      <label class="field">
+        <span>Target amount</span>
+        <input name="targetAmount" type="number" inputmode="decimal" [(ngModel)]="form.targetAmount" placeholder="100000" />
+      </label>
+
+      <div class="field option-field">
+        <span id="goal-currency-label">Currency</span>
+        <button
+          type="button"
+          class="option-trigger"
+          aria-haspopup="listbox"
+          aria-labelledby="goal-currency-label"
+          [attr.aria-expanded]="isCurrencyOpen"
+          (click)="toggleCurrency()">
+          {{ form.currency }}
+        </button>
+        <div class="option-list" role="listbox" aria-labelledby="goal-currency-label" *ngIf="isCurrencyOpen">
+          <button
+            type="button"
+            role="option"
+            *ngFor="let currency of currencies"
+            [class.selected]="form.currency === currency"
+            [attr.aria-selected]="form.currency === currency"
+            (click)="selectCurrency(currency)">
+            {{ currency }}
+          </button>
+        </div>
+      </div>
+
+      <label class="field">
+        <span>Target date</span>
+        <input name="targetDate" type="date" [(ngModel)]="form.targetDate" />
+      </label>
+    </div>
+
+    <p class="error-message" *ngIf="errorMessage" aria-live="polite">{{ errorMessage }}</p>
+
+    <div class="actions" *ngIf="!isLoading">
+      <button type="button" class="secondary" (click)="cancel()" [disabled]="isSaving">Cancel</button>
+      <button type="submit" class="primary" [disabled]="isSaving">
+        <ion-spinner name="crescent" *ngIf="isSaving" aria-hidden="true"></ion-spinner>
+        <span>{{ isSaving ? 'Saving Goal...' : isEditMode ? 'Save Changes' : 'Create Goal' }}</span>
+      </button>
+    </div>
+  </form>
+</ion-content>

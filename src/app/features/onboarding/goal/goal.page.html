@@ -47,7 +47,7 @@
   <ion-toolbar>
     <ion-button
       expand="block"
-      [disabled]="selectedGoals.length === 0"
+      [disabled]="selectedGoals.length === 0 || isNavigating"
       (click)="continue()">
       Continue
     </ion-button>

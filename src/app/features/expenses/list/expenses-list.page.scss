@@ -1,22 +1,20 @@
+@use '../../../../theme/app-surfaces' as surfaces;
+
 .expenses-page {
-  --background: linear-gradient(180deg, #06140f 0%, #081c15 45%, #0b2d22 100%);
-  color: #ffffff;
+  --background: var(--app-background);
+  color: var(--app-text-heading);
   position: relative;
   overflow: hidden;
 }
 
 .glow {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(110px);
-  opacity: 0.22;
-  pointer-events: none;
+  @include surfaces.app-glow-blob;
 }
 
 .glow-one {
   width: 260px;
   height: 260px;
-  background: #52b788;
+  background: var(--ion-color-primary);
   top: -110px;
   right: -90px;
 }
@@ -24,7 +22,7 @@
 .glow-two {
   width: 220px;
   height: 220px;
-  background: #40916c;
+  background: var(--ion-color-secondary);
   bottom: 120px;
   left: -100px;
 }
@@ -32,10 +30,10 @@
 .expenses-container {
   position: relative;
   z-index: 2;
-  padding: 58px 22px 150px;
+  padding: 58px var(--app-space-sm) 150px;
   max-width: 720px;
   margin: auto;
-  animation: fade-up 360ms ease both;
+  animation: app-fade-up 360ms ease both;
 }
 
 .page-header {
@@ -43,18 +41,18 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: 16px;
-  margin-bottom: 22px;
+  margin-bottom: var(--app-space-md);
 }
 
 .eyebrow {
   margin: 0 0 6px;
-  color: rgba(255, 255, 255, 0.62);
+  color: var(--app-text-body);
   font-size: 14px;
 }
 
 .page-header h1 {
   margin: 0 0 8px;
-  color: #ffffff;
+  color: var(--app-text-heading);
   font-size: 30px;
   font-weight: 900;
 }
@@ -65,7 +63,7 @@
 .field span,
 .category-row span,
 .expense-info p {
-  color: rgba(255, 255, 255, 0.64);
+  color: var(--app-text-body);
 }
 
 .page-header p {
@@ -81,7 +79,7 @@
   min-width: 48px;
   min-height: 48px;
   border: none;
-  color: #ffffff;
+  color: var(--app-text-heading);
   cursor: pointer;
   transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
 }
@@ -89,9 +87,9 @@
 .icon-button {
   width: 52px;
   height: 52px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--app-radius-md);
+  background: var(--app-glass-bg);
+  border: 1px solid var(--app-glass-border);
 }
 
 .summary-card,
@@ -100,26 +98,26 @@
 .expense-row,
 .category-breakdown,
 .success-state {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(18px);
+  background: var(--app-glass-bg);
+  border: 1px solid var(--app-glass-border);
+  backdrop-filter: blur(var(--app-glass-blur));
 }
 
 .summary-card {
-  padding: 26px;
-  border-radius: 30px;
-  margin-bottom: 16px;
+  padding: var(--app-space-md);
+  border-radius: var(--app-radius-xl);
+  margin-bottom: var(--app-space-sm);
   background:
-    radial-gradient(circle at top right, rgba(233, 196, 106, 0.18), transparent 36%),
-    linear-gradient(135deg, rgba(82, 183, 136, 0.24), rgba(255, 255, 255, 0.07));
-  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.24);
-  animation: card-enter 280ms ease-out both;
+    radial-gradient(circle at top right, rgba(var(--app-color-gold-rgb), 0.18), transparent 36%),
+    linear-gradient(135deg, rgba(var(--ion-color-primary-rgb), 0.24), rgba(255, 255, 255, 0.07));
+  box-shadow: var(--app-shadow-card);
+  animation: app-card-enter 280ms ease-out both;
 }
 
 .summary-card strong {
   display: block;
   margin: 10px 0 4px;
-  color: #ffffff;
+  color: var(--app-text-heading);
   font-size: 36px;
   font-weight: 900;
 }
@@ -128,13 +126,14 @@
 .filters,
 .state-card,
 .success-state {
-  border-radius: 26px;
-  margin-bottom: 18px;
+  border-radius: var(--app-radius-lg);
+  margin-bottom: var(--app-space-sm);
 }
 
 .category-breakdown,
 .filters {
-  padding: 16px;
+  padding: var(--app-space-sm);
+  list-style: none;
 }
 
 .category-row {
@@ -147,21 +146,23 @@
 }
 
 .category-row strong {
-  color: #ffffff;
+  color: var(--app-text-heading);
   font-size: 12px;
 }
 
 .bar {
+  display: block;
   height: 8px;
-  border-radius: 10px;
+  border-radius: var(--app-radius-pill);
   background: rgba(255, 255, 255, 0.1);
   overflow: hidden;
 }
 
-.bar div {
+.bar span {
+  display: block;
   height: 100%;
   border-radius: inherit;
-  background: #52b788;
+  background: var(--ion-color-primary);
 }
 
 .filters {
@@ -183,7 +184,7 @@
   justify-content: center;
   gap: 6px;
   padding: 12px;
-  border-radius: 18px;
+  border-radius: var(--app-radius-md);
   background: rgba(255, 255, 255, 0.07);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -194,7 +195,7 @@
 }
 
 .search-field ion-icon {
-  color: #52b788;
+  color: var(--ion-color-primary);
   font-size: 20px;
 }
 
@@ -202,20 +203,20 @@ input {
   width: 100%;
   border: 0;
   outline: 0;
-  color: #ffffff;
+  color: var(--app-text-heading);
   background: transparent;
   font: inherit;
 }
 
 input::placeholder {
-  color: rgba(255, 255, 255, 0.48);
+  color: var(--app-text-muted);
 }
 
 .option-trigger {
   min-height: 34px;
   border: 0;
   background: transparent;
-  color: #ffffff;
+  color: var(--app-text-heading);
   text-align: left;
   font: inherit;
   font-weight: 800;
@@ -225,12 +226,12 @@ input::placeholder {
   display: grid;
   gap: 8px;
   margin-top: 8px;
-  animation: selector-open 180ms ease-out both;
+  animation: app-selector-open 180ms ease-out both;
 }
 
 .option-list button {
   min-height: 44px;
-  border-radius: 15px;
+  border-radius: var(--app-radius-sm);
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.07);
   color: rgba(255, 255, 255, 0.82);
@@ -240,20 +241,20 @@ input::placeholder {
 }
 
 .option-list button.selected {
-  border-color: #52b788;
-  background: rgba(82, 183, 136, 0.2);
-  color: #ffffff;
+  border-color: var(--ion-color-primary);
+  background: rgba(var(--ion-color-primary-rgb), 0.2);
+  color: var(--app-text-heading);
 }
 
 .segmented {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 8px;
 }
 
 .segmented button {
   min-height: 48px;
-  border-radius: 16px;
+  border-radius: var(--app-radius-sm);
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.07);
   color: rgba(255, 255, 255, 0.7);
@@ -261,57 +262,54 @@ input::placeholder {
 }
 
 .segmented button.active {
-  background: rgba(82, 183, 136, 0.2);
-  color: #52b788;
-  border-color: rgba(82, 183, 136, 0.42);
+  background: rgba(var(--ion-color-primary-rgb), 0.2);
+  color: var(--ion-color-primary);
+  border-color: rgba(var(--ion-color-primary-rgb), 0.42);
 }
 
 .state-card {
-  padding: 26px;
+  padding: var(--app-space-md);
   text-align: center;
-  animation: card-enter 220ms ease-out both;
+  animation: app-card-enter 220ms ease-out both;
 }
 
 .state-card ion-icon,
 .state-card ion-spinner {
-  color: #52b788;
+  color: var(--ion-color-primary);
   font-size: 34px;
 }
 
 .state-card h2 {
   margin: 12px 0 8px;
-  color: #ffffff;
+  color: var(--app-text-heading);
   font-size: 20px;
   font-weight: 800;
 }
 
 .state-card p {
   margin: 0;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--app-text-body);
   line-height: 1.5;
 }
 
 .state-card.error {
-  border-color: rgba(231, 76, 60, 0.3);
-  background: rgba(231, 76, 60, 0.12);
+  border-color: rgba(var(--ion-color-danger-rgb), 0.3);
+  background: rgba(var(--ion-color-danger-rgb), 0.12);
 }
 
 .state-card button {
   margin-top: 16px;
   padding: 0 18px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, #40916c, #52b788);
+  border-radius: var(--app-radius-md);
+  background: linear-gradient(135deg, var(--ion-color-secondary), var(--ion-color-primary));
   font-weight: 800;
 }
 
 .success-state {
   padding: 12px 14px;
-  animation: card-enter 220ms ease-out both;
-}
-
-.success-state p {
-  margin: 0;
-  color: #95d5b2;
+  margin: 0 0 var(--app-space-sm);
+  animation: app-card-enter 220ms ease-out both;
+  color: var(--ion-color-success);
   font-size: 13px;
   font-weight: 800;
 }
@@ -320,6 +318,9 @@ input::placeholder {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .expense-row {
@@ -327,11 +328,11 @@ input::placeholder {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 16px;
-  border-radius: 22px;
-  color: #ffffff;
+  padding: var(--app-space-sm);
+  border-radius: var(--app-radius-lg);
+  color: var(--app-text-heading);
   text-align: left;
-  animation: list-enter 220ms ease-out both;
+  animation: app-list-enter 220ms ease-out both;
   transition: transform 160ms ease, border-color 160ms ease;
 }
 
@@ -339,9 +340,9 @@ input::placeholder {
   width: 44px;
   height: 44px;
   min-width: 44px;
-  border-radius: 15px;
-  background: rgba(82, 183, 136, 0.14);
-  color: #52b788;
+  border-radius: var(--app-radius-sm);
+  background: rgba(var(--ion-color-primary-rgb), 0.14);
+  color: var(--ion-color-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -350,11 +351,12 @@ input::placeholder {
 .expense-info {
   min-width: 0;
   flex: 1;
+  display: block;
 }
 
 .expense-info h2 {
   margin: 0 0 5px;
-  color: #ffffff;
+  color: var(--app-text-heading);
   font-size: 15px;
   font-weight: 800;
 }
@@ -368,7 +370,7 @@ input::placeholder {
 }
 
 .expense-row strong {
-  color: #ff8a80;
+  color: var(--ion-color-danger);
   font-size: 14px;
   font-weight: 900;
 }
@@ -394,14 +396,14 @@ input::placeholder {
 .fab-main {
   width: 58px;
   height: 58px;
-  border-radius: 22px;
-  background: linear-gradient(135deg, #40916c, #52b788);
+  border-radius: var(--app-radius-lg);
+  background: linear-gradient(135deg, var(--ion-color-secondary), var(--ion-color-primary));
 }
 
 .fab-secondary {
   width: 48px;
   height: 48px;
-  border-radius: 18px;
+  border-radius: var(--app-radius-md);
   background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.14);
 }
@@ -420,49 +422,5 @@ input::placeholder {
 @media (min-width: 620px) {
   .field-row {
     grid-template-columns: 1.2fr 1fr 1fr;
-  }
-}
-
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes card-enter {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes selector-open {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes list-enter {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }

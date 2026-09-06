@@ -1,0 +1,110 @@
+<ion-header class="savings-header">
+  <ion-toolbar>
+    <ion-buttons slot="start"><ion-back-button defaultHref="/home" text=""></ion-back-button></ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="savings-page">
+  <div class="glow glow-one" aria-hidden="true"></div>
+  <div class="glow glow-two" aria-hidden="true"></div>
+
+  <main class="savings-container">
+    <header class="page-header">
+      <div>
+        <h1>Saving dashboard</h1>
+      </div>
+      <button type="button" class="icon-button" (click)="loadSavings(false)" [disabled]="isRetrying" aria-label="Refresh savings">
+        <ion-icon name="refresh-outline" aria-hidden="true"></ion-icon>
+      </button>
+    </header>
+
+    <section class="hero-card">
+      <span>Total saved</span>
+      <strong>{{ formatMoney(summary?.totalSaved || 0) }}</strong>
+      <p>{{ summary?.activeGoals || 0 }} active · {{ summary?.completedGoals || 0 }} completed goals</p>
+    </section>
+
+    <div class="quick-actions">
+      <button type="button" (click)="createGoal()">
+        <ion-icon name="add-outline" aria-hidden="true"></ion-icon>
+        <span>Create Goal</span>
+      </button>
+      <button type="button" (click)="addSavings()">
+        <ion-icon name="wallet-outline" aria-hidden="true"></ion-icon>
+        <span>Add Savings</span>
+      </button>
+    </div>
+
+    <button type="button" class="daily-card" (click)="openDailySavings()">
+      <div>
+        <p>Daily Savings Mode</p>
+        <h2>{{ summary?.plan?.isEnabled ? 'Active' : 'Ready when you are' }}</h2>
+        <span class="streak">{{ summary?.plan?.currentStreak || 0 }} day current streak · {{ summary?.plan?.longestStreak || 0 }} best</span>
+      </div>
+    </button>
+
+    <div class="state-card loading" *ngIf="isLoading" aria-live="polite" aria-busy="true">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading your savings...</p>
+    </div>
+
+    <div class="state-card error" *ngIf="!isLoading && errorMessage" aria-live="polite">
+      <p>{{ errorMessage }}</p>
+      <button type="button" (click)="loadSavings(false)">Try again</button>
+    </div>
+
+    <div class="state-card empty" *ngIf="!isLoading && !errorMessage && goals.length === 0" aria-live="polite">
+      <ion-icon name="wallet-outline" aria-hidden="true"></ion-icon>
+      <h2>No savings goals yet</h2>
+      <p>Create your first goal or save without a goal to start building momentum.</p>
+      <button type="button" (click)="createGoal()">Create Goal</button>
+    </div>
+
+    <p class="success-state" *ngIf="!isLoading && !errorMessage && goals.length" aria-live="polite">
+      {{ goals.length }} goal{{ goals.length === 1 ? '' : 's' }} loaded
+    </p>
+
+    <ul class="goal-list" *ngIf="!isLoading && !errorMessage && goals.length">
+      <li *ngFor="let goal of goals; let i = index; trackBy: trackByGoalId">
+        <button type="button" class="goal-card" [style.animationDelay.ms]="i * 45" (click)="openGoal(goal)">
+          <div class="goal-top">
+            <div>
+              <h2>{{ goal.name }}</h2>
+              <p>{{ formatDate(goal.targetDate) }}</p>
+            </div>
+            <span [class.completed]="goal.isCompleted">{{ goal.isCompleted ? 'Complete' : progressLabel(goal) + '%' }}</span>
+          </div>
+          <ion-progress-bar [value]="progress(goal)" color="success"></ion-progress-bar>
+          <div class="amount-row">
+            <strong>{{ formatMoney(goal.currentAmount, goal.currency) }}</strong>
+            <span>of {{ formatMoney(goal.targetAmount, goal.currency) }}</span>
+          </div>
+        </button>
+      </li>
+    </ul>
+
+    <section class="activity-card" *ngIf="!isLoading && !errorMessage">
+      <div class="section-title">
+        <h2>Recent Savings</h2>
+      </div>
+      <ul class="activity-list">
+        <li class="activity-row muted" *ngIf="!summary?.recentSavings?.length">
+          <span class="activity-icon"><ion-icon name="calendar-outline" aria-hidden="true"></ion-icon></span>
+          <div>
+            <h3>No savings activity yet</h3>
+            <p>Added savings will appear here.</p>
+          </div>
+        </li>
+        <li class="activity-row" *ngFor="let entry of summary?.recentSavings || []; trackBy: trackByEntryId">
+          <span class="activity-icon"><ion-icon name="checkmark-circle-outline" aria-hidden="true"></ion-icon></span>
+          <div>
+            <h3>{{ formatMoney(entry.amount, entry.currency) }}</h3>
+            <p>{{ formatEntry(entry) }}</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <app-dashboard-tabs></app-dashboard-tabs>
+</ion-content>

@@ -3,7 +3,7 @@ ion-header {
 }
 
 ion-toolbar {
-  --background: rgba(6,20,15,.55);
+  --background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(14px);
   --border-width: 0;
 }
@@ -13,12 +13,7 @@ ion-back-button {
 }
 
 .login-page {
-  --background: linear-gradient(
-    180deg,
-    #06140F 0%,
-    #081C15 45%,
-    #0D2D20 100%
-  );
+  --background: var(--app-background);
 
   position: relative;
   overflow: hidden;
@@ -83,14 +78,14 @@ ion-back-button {
 }
 
 .heading h1 {
-  color: white;
+  color: var(--app-text-heading);
   font-size: 34px;
   font-weight: 700;
   margin-bottom: 10px;
 }
 
 .heading p {
-  color: rgba(255,255,255,.72);
+  color: var(--app-text-body);
   font-size: 15px;
   line-height: 1.6;
 }
@@ -108,23 +103,23 @@ ion-back-button {
 }
 
 .input-box label {
-  color: white;
+  color: var(--app-text-heading);
   font-size: 14px;
   margin-bottom: 8px;
   font-weight: 600;
 }
 
 .input-box ion-input {
-  --color: white;
-  --placeholder-color: rgba(255,255,255,.45);
-  border-bottom: 1px solid rgba(255,255,255,.18);
+  --color: var(--app-text-heading);
+  --placeholder-color: var(--app-text-muted);
+  border-bottom: 1px solid var(--app-glass-border);
   padding-bottom: 8px;
 }
 
 .password-field {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid rgba(255,255,255,.18);
+  border-bottom: 1px solid var(--app-glass-border);
 }
 
 .password-field ion-input {
@@ -160,8 +155,8 @@ ion-back-button {
   margin-top: 18px;
   height: 56px;
   --border-radius: 18px;
-  color: white;
-  border: 1px solid rgba(255,255,255,.12);
+  color: var(--app-text-heading);
+  border: 1px solid var(--app-glass-border);
 }
 
 .divider {
@@ -174,11 +169,11 @@ ion-back-button {
 .divider div {
   flex: 1;
   height: 1px;
-  background: rgba(255,255,255,.15);
+  background: var(--app-glass-border);
 }
 
 .divider span {
-  color: rgba(255,255,255,.55);
+  color: var(--app-text-caption);
   font-size: 13px;
   letter-spacing: 2px;
 }
@@ -186,7 +181,7 @@ ion-back-button {
 .footer {
   margin-top: 32px;
   text-align: center;
-  color: rgba(255,255,255,.72);
+  color: var(--app-text-body);
   font-size: 15px;
 }
 

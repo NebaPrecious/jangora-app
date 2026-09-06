@@ -1,0 +1,86 @@
+<ion-header class="savings-header">
+  <ion-toolbar>
+    <ion-buttons slot="start"><ion-back-button defaultHref="/savings" text=""></ion-back-button></ion-buttons>
+    <ion-title>Daily Savings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="daily-page">
+  <main class="daily-container">
+    <div class="intro">
+      <p class="eyebrow">Daily Savings Mode</p>
+      <h1>Small saves, steady progress</h1>
+      <p>Set a daily target and keep your streak visible.</p>
+    </div>
+
+    <div class="state-card loading" *ngIf="isLoading" aria-live="polite" aria-busy="true">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading daily savings...</p>
+    </div>
+
+    <div class="state-card error" *ngIf="!isLoading && errorMessage" aria-live="polite">
+      <p>{{ errorMessage }}</p>
+      <button type="button" (click)="loadDailySavings(false)">Try again</button>
+    </div>
+
+    <ng-container *ngIf="!isLoading">
+      <section class="settings-card">
+        <div class="toggle-row">
+          <div>
+            <h2>Daily mode</h2>
+            <p>{{ form.isDailyModeEnabled ? 'Daily saving is active.' : 'Turn it on when you want a daily rhythm.' }}</p>
+          </div>
+          <ion-toggle name="dailyMode" [(ngModel)]="form.isDailyModeEnabled"></ion-toggle>
+        </div>
+
+        <label class="field">
+          <span>Daily target</span>
+          <input name="dailyTargetAmount" type="number" inputmode="decimal" [(ngModel)]="form.dailyTargetAmount" placeholder="500" />
+        </label>
+
+        <label class="field">
+          <span>Reminder time</span>
+          <input name="reminderTime" type="time" [(ngModel)]="form.reminderTime" />
+        </label>
+
+        <button type="button" class="primary full" (click)="saveSettings()" [disabled]="isSavingSettings">
+          <ion-spinner name="crescent" *ngIf="isSavingSettings" aria-hidden="true"></ion-spinner>
+          <span>{{ isSavingSettings ? 'Saving Settings...' : 'Save Settings' }}</span>
+        </button>
+      </section>
+
+      <section class="streak-card">
+        <div><span>Current streak</span><strong class="streak-value">{{ dailyState?.plan?.currentStreak || 0 }} days</strong></div>
+        <div><span>Longest streak</span><strong class="streak-value">{{ dailyState?.plan?.longestStreak || 0 }} days</strong></div>
+        <div><span>Today</span><strong>{{ todaySaved ? 'Saved' : 'Not saved yet' }}</strong></div>
+      </section>
+
+      <section class="log-card">
+        <h2>Log today’s savings</h2>
+        <label class="field">
+          <span>Amount</span>
+          <input name="logAmount" type="number" inputmode="decimal" [(ngModel)]="form.logAmount" [placeholder]="form.dailyTargetAmount || '500'" />
+        </label>
+        <button type="button" class="primary full" (click)="logToday()" [disabled]="isLogging">
+          <ion-spinner name="crescent" *ngIf="isLogging" aria-hidden="true"></ion-spinner>
+          <span>{{ isLogging ? 'Saving...' : 'Log Today’s Savings' }}</span>
+        </button>
+      </section>
+
+      <section class="log-card" *ngIf="yesterdayNeedsCatchup">
+        <h2>Missed yesterday?</h2>
+        <p>Catch up if you saved offline, or skip and continue from today.</p>
+        <label class="field">
+          <span>Catch-up amount</span>
+          <input name="catchUpAmount" type="number" inputmode="decimal" [(ngModel)]="form.catchUpAmount" [placeholder]="form.dailyTargetAmount || '500'" />
+        </label>
+        <div class="split-actions">
+          <button type="button" class="secondary" (click)="skipMissedDay()">Skip</button>
+          <button type="button" class="primary" (click)="catchUpYesterday()" [disabled]="isLogging">Catch Up</button>
+        </div>
+      </section>
+
+      <p class="skip-message" *ngIf="skipMessage" aria-live="polite">{{ skipMessage }}</p>
+    </ng-container>
+  </main>
+</ion-content>

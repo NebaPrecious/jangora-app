@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { NavigationFocusService } from '../../../core/services/navigation-focus.service';
 
 import {
   IonContent,
@@ -41,6 +42,7 @@ import {
   ]
 })
 export class NotificationsPage {
+  isNavigating = false;
 
   notifications = [
     {
@@ -67,7 +69,10 @@ export class NotificationsPage {
 
   selected: string[] = [];
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private readonly navigationFocusService: NavigationFocusService,
+  ) {
     addIcons({
       notificationsOutline,
       walletOutline,
@@ -90,8 +95,11 @@ export class NotificationsPage {
     return this.selected.includes(item);
   }
 
-  continue() {
+  async continue() {
+    if (this.isNavigating) return;
+    this.isNavigating = true;
+    this.navigationFocusService.blurActiveElement();
     localStorage.setItem('notifications', JSON.stringify(this.selected));
-    this.router.navigateByUrl('/ai-introduction');
+    await this.router.navigateByUrl('/ai-introduction');
   }
 }

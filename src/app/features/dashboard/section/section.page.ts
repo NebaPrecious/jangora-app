@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   IonContent,
   IonIcon,
-  IonProgressBar,
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
@@ -34,7 +33,7 @@ interface SectionRouteData {
   standalone: true,
   templateUrl: './section.page.html',
   styleUrls: ['./section.page.scss'],
-  imports: [CommonModule, IonContent, IonIcon, IonProgressBar, DashboardTabsComponent],
+  imports: [CommonModule, IonContent, IonIcon, DashboardTabsComponent],
 })
 export class SectionPage implements OnInit {
   private readonly router = inject(Router);
@@ -71,6 +70,10 @@ export class SectionPage implements OnInit {
       this.sectionIcon = section?.icon ?? 'receipt-outline';
       this.showQuickActions = section?.showQuickActions ?? true;
     });
+  }
+
+  goHome(): void {
+    void this.router.navigateByUrl('/home');
   }
 
   handleQuickAction(action: string): void {

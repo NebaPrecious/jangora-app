@@ -1,9 +1,9 @@
 <ion-content [fullscreen]="true" class="dashboard-section-page">
-  <div class="glow glow-one"></div>
-  <div class="glow glow-two"></div>
+  <div class="glow glow-one" aria-hidden="true"></div>
+  <div class="glow glow-two" aria-hidden="true"></div>
 
-  <div class="section-container">
-    <div class="section-header">
+  <main class="section-container">
+    <header class="section-header">
       <div>
         <p class="eyebrow">Dashboard</p>
         <h1>{{ sectionTitle }}</h1>
@@ -11,9 +11,9 @@
       </div>
 
       <div class="section-icon">
-        <ion-icon [name]="sectionIcon"></ion-icon>
+        <ion-icon [name]="sectionIcon" aria-hidden="true"></ion-icon>
       </div>
-    </div>
+    </header>
 
     <div class="quick-actions" *ngIf="showQuickActions">
       <button
@@ -21,38 +21,32 @@
         class="quick-action"
         *ngFor="let action of quickActions"
         (click)="handleQuickAction(action.action)">
-        <div class="quick-icon">
-          <ion-icon [name]="action.icon"></ion-icon>
-        </div>
+        <span class="quick-icon">
+          <ion-icon [name]="action.icon" aria-hidden="true"></ion-icon>
+        </span>
         <span>{{ action.label }}</span>
       </button>
     </div>
 
-    <div class="section-card">
+    <section class="section-card" aria-live="polite">
       <div class="card-header">
         <div>
-          <p>Focus for today</p>
-          <h2>Keep your money momentum steady</h2>
+          <p>Coming soon</p>
+          <h2>{{ sectionTitle }} isn't available yet</h2>
         </div>
         <div class="card-badge">
-          <ion-icon name="sparkles-outline"></ion-icon>
+          <ion-icon name="sparkles-outline" aria-hidden="true"></ion-icon>
         </div>
       </div>
 
-      <div class="stat-row">
-        <div>
-          <span>Tracked this month</span>
-          <strong>12 entries</strong>
-        </div>
-        <div>
-          <span>Next milestone</span>
-          <strong>85% of goal</strong>
-        </div>
-      </div>
+      <p class="section-card-body">
+        {{ sectionDescription }} We're still building this part of Jangora, so there's nothing
+        to show here yet.
+      </p>
 
-      <ion-progress-bar value="0.85" color="success"></ion-progress-bar>
-    </div>
-  </div>
+      <button type="button" class="primary-action" (click)="goHome()">Back to Home</button>
+    </section>
+  </main>
 
   <app-dashboard-tabs></app-dashboard-tabs>
 </ion-content>

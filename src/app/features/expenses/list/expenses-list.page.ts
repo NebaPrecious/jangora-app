@@ -38,14 +38,14 @@ export class ExpensesListPage implements OnInit, OnDestroy {
   private refreshSubscription?: Subscription;
 
   readonly categories: Array<ExpenseCategory | ''> = ['', 'Food', 'Transport', 'Bills', 'Health', 'Entertainment', 'Shopping', 'Other'];
-  readonly views: ExpenseView[] = ['daily', 'weekly', 'monthly'];
+  readonly views: Array<ExpenseView | ''> = ['', 'daily', 'weekly', 'monthly'];
 
   expenses: Expense[] = [];
   summary: ExpenseSummary | null = null;
   filters: ExpenseFilters = {
     search: '',
     category: '',
-    view: 'monthly',
+    view: '',
     page: 1,
     limit: 20,
   };
@@ -122,9 +122,13 @@ export class ExpensesListPage implements OnInit, OnDestroy {
     void this.loadExpenses(false);
   }
 
-  setView(view: ExpenseView): void {
+  setView(view: ExpenseView | ''): void {
     this.filters.view = view;
     this.applyFilters();
+  }
+
+  viewLabel(view: ExpenseView | ''): string {
+    return view ? view[0].toUpperCase() + view.slice(1) : 'All';
   }
 
   openExpense(expense: Expense): void {
@@ -136,7 +140,7 @@ export class ExpensesListPage implements OnInit, OnDestroy {
   }
 
   addSavings(): void {
-    void this.router.navigateByUrl('/savings');
+    void this.router.navigateByUrl('/savings/add');
   }
 
   formatMoney(amount: string | number, currency = this.expenses[0]?.currency || 'XAF'): string {

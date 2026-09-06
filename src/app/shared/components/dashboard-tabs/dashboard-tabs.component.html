@@ -1,13 +1,14 @@
-<div class="bottom-nav">
+<nav class="bottom-nav" aria-label="Primary">
   <button
     type="button"
     class="nav-item"
     *ngFor="let tab of tabs"
     [class.active]="activeTab === tab.id"
+    [attr.aria-current]="activeTab === tab.id ? 'page' : null"
     (click)="setTab(tab.route)">
-    <div class="nav-icon">
-      <ion-icon [name]="tab.icon"></ion-icon>
-    </div>
+    <span class="nav-icon">
+      <ion-icon [name]="tab.icon" aria-hidden="true"></ion-icon>
+    </span>
     <span>{{ tab.label }}</span>
   </button>
-</div>
+</nav>

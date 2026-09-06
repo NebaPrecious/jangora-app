@@ -111,18 +111,46 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'transactions',
+    loadComponent: () =>
+      import('./features/transactions/history/transactions-history.page').then((m) => m.TransactionsHistoryPage),
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'savings',
     loadComponent: () =>
-      import('./features/dashboard/section/section.page').then((m) => m.SectionPage),
+      import('./features/savings/home/savings-home.page').then((m) => m.SavingsHomePage),
     canActivate: [AuthGuard],
-    data: {
-      section: {
-        title: 'Savings',
-        description: 'Build your emergency and milestone funds with calm consistency.',
-        icon: 'wallet-outline',
-        showQuickActions: false,
-      },
-    },
+  },
+  {
+    path: 'savings/goals/new',
+    loadComponent: () =>
+      import('./features/savings/goal-form/savings-goal-form.page').then((m) => m.SavingsGoalFormPage),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'savings/goals/:id',
+    loadComponent: () =>
+      import('./features/savings/goal-detail/savings-goal-detail.page').then((m) => m.SavingsGoalDetailPage),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'savings/goals/:id/edit',
+    loadComponent: () =>
+      import('./features/savings/goal-form/savings-goal-form.page').then((m) => m.SavingsGoalFormPage),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'savings/add',
+    loadComponent: () =>
+      import('./features/savings/add-savings/add-savings.page').then((m) => m.AddSavingsPage),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'savings/daily',
+    loadComponent: () =>
+      import('./features/savings/daily-savings/daily-savings.page').then((m) => m.DailySavingsPage),
+    canActivate: [AuthGuard],
   },
   {
     path: 'budget',

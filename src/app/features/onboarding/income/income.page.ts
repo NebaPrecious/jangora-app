@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { NavigationFocusService } from '../../../core/services/navigation-focus.service';
 
 import {
   IonContent,
@@ -35,6 +36,7 @@ import {
 export class IncomePage {
 
   selectedIncome = '';
+  isNavigating = false;
 
   incomeRanges = [
     'Under 100,000',
@@ -45,14 +47,20 @@ export class IncomePage {
     'Above 3,000,000'
   ];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private readonly navigationFocusService: NavigationFocusService,
+  ) {}
 
   selectIncome(range: string) {
     this.selectedIncome = range;
   }
 
-  continue() {
+  async continue() {
+    if (this.isNavigating || !this.selectedIncome) return;
+    this.isNavigating = true;
+    this.navigationFocusService.blurActiveElement();
     localStorage.setItem('incomeRange', this.selectedIncome);
-    this.router.navigateByUrl('/notifications');
+    await this.router.navigateByUrl('/notifications');
   }
 }

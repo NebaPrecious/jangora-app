@@ -8,16 +8,16 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="expense-form-page">
-  <div class="glow glow-one"></div>
-  <div class="glow glow-two"></div>
+  <div class="glow glow-one" aria-hidden="true"></div>
+  <div class="glow glow-two" aria-hidden="true"></div>
 
-  <div class="form-container">
+  <main class="form-container">
     <div class="form-heading">
       <p>{{ isEditMode ? 'Update spending' : 'New spending' }}</p>
       <h1>{{ isEditMode ? 'Refine this expense' : 'Track an expense' }}</h1>
     </div>
 
-    <div class="state-card" *ngIf="isLoading">
+    <div class="state-card" *ngIf="isLoading" aria-live="polite" aria-busy="true">
       <ion-spinner name="crescent"></ion-spinner>
       <p>Loading expense...</p>
     </div>
@@ -26,7 +26,7 @@
       <label class="field amount-field">
         <span>Amount</span>
         <div>
-          <ion-icon name="cash-outline"></ion-icon>
+          <ion-icon name="cash-outline" aria-hidden="true"></ion-icon>
           <input
             type="number"
             name="amount"
@@ -41,15 +41,23 @@
 
       <div class="field-grid">
         <div class="field option-field">
-          <span>Currency</span>
-          <button type="button" class="option-trigger" (click)="toggleOptions('currency')">
+          <span id="currency-label">Currency</span>
+          <button
+            type="button"
+            class="option-trigger"
+            aria-haspopup="listbox"
+            aria-labelledby="currency-label"
+            [attr.aria-expanded]="expandedOptions === 'currency'"
+            (click)="toggleOptions('currency')">
             {{ form.currency }}
           </button>
-          <div class="option-list" *ngIf="expandedOptions === 'currency'">
+          <div class="option-list" role="listbox" aria-labelledby="currency-label" *ngIf="expandedOptions === 'currency'">
             <button
               type="button"
+              role="option"
               *ngFor="let currency of currencies"
               [class.selected]="form.currency === currency"
+              [attr.aria-selected]="form.currency === currency"
               (click)="selectCurrency(currency)">
               {{ currency }}
             </button>
@@ -57,15 +65,23 @@
         </div>
 
         <div class="field option-field">
-          <span>Category</span>
-          <button type="button" class="option-trigger" (click)="toggleOptions('category')">
+          <span id="category-label">Category</span>
+          <button
+            type="button"
+            class="option-trigger"
+            aria-haspopup="listbox"
+            aria-labelledby="category-label"
+            [attr.aria-expanded]="expandedOptions === 'category'"
+            (click)="toggleOptions('category')">
             {{ form.category }}
           </button>
-          <div class="option-list" *ngIf="expandedOptions === 'category'">
+          <div class="option-list" role="listbox" aria-labelledby="category-label" *ngIf="expandedOptions === 'category'">
             <button
               type="button"
+              role="option"
               *ngFor="let category of categories"
               [class.selected]="form.category === category"
+              [attr.aria-selected]="form.category === category"
               (click)="selectCategory(category)">
               {{ category }}
             </button>
@@ -104,30 +120,38 @@
       </label>
 
       <div class="field option-field" *ngIf="form.isRecurring">
-        <span>Repeats</span>
-        <button type="button" class="option-trigger" (click)="toggleOptions('recurrence')">
+        <span id="recurrence-label">Repeats</span>
+        <button
+          type="button"
+          class="option-trigger"
+          aria-haspopup="listbox"
+          aria-labelledby="recurrence-label"
+          [attr.aria-expanded]="expandedOptions === 'recurrence'"
+          (click)="toggleOptions('recurrence')">
           {{ form.recurrenceType }}
         </button>
-        <div class="option-list" *ngIf="expandedOptions === 'recurrence'">
+        <div class="option-list" role="listbox" aria-labelledby="recurrence-label" *ngIf="expandedOptions === 'recurrence'">
           <button
             type="button"
+            role="option"
             *ngFor="let recurrenceType of recurrenceTypes"
             [class.selected]="form.recurrenceType === recurrenceType"
+            [attr.aria-selected]="form.recurrenceType === recurrenceType"
             (click)="selectRecurrenceType(recurrenceType)">
             {{ recurrenceType }}
           </button>
         </div>
       </div>
 
-      <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <p class="error-message" *ngIf="errorMessage" aria-live="polite">{{ errorMessage }}</p>
 
       <div class="button-row">
         <button type="button" class="secondary-button" (click)="cancel()" [disabled]="isSaving">Cancel</button>
         <button type="submit" class="primary-button" [disabled]="isSaving">
-          <ion-spinner *ngIf="isSaving" name="crescent"></ion-spinner>
+          <ion-spinner *ngIf="isSaving" name="crescent" aria-hidden="true"></ion-spinner>
           <span>{{ isSaving ? 'Saving Expense...' : (isEditMode ? 'Save Changes' : 'Save Expense') }}</span>
         </button>
       </div>
     </form>
-  </div>
+  </main>
 </ion-content>

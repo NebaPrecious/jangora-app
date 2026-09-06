@@ -5,6 +5,7 @@ import { AuthService } from '../../../core/auth/auth.service';
 import { UserStateService } from '../../../core/services/user-state.service';
 import { UserPreferencesService } from '../../../core/services/user-preferences.service';
 import { Expense, ExpensesService, ExpenseSummary } from '../../../core/services/expenses.service';
+import { SavingsGoal, SavingsService, SavingsSummary } from '../../../core/services/savings.service';
 import { DashboardTabsComponent } from '../../../shared/components/dashboard-tabs/dashboard-tabs.component';
 import { Subscription } from 'rxjs';
 
@@ -49,18 +50,27 @@ export class HomePage implements OnInit, OnDestroy {
   private readonly userStateService = inject(UserStateService);
   private readonly userPreferencesService = inject(UserPreferencesService);
   private readonly expensesService = inject(ExpensesService);
+  private readonly savingsService = inject(SavingsService);
 
   userName = 'there';
   currency = localStorage.getItem('currency') || 'XAF';
 
   totalBalance = 0;
   monthlySpent = 0;
-  monthlyBudget = 250000;
-  savingsProgress = 72;
+  /** No Budget module exists yet - both stay at these values until a real budget API is wired up. */
+  hasBudget = false;
+  monthlyBudget = 0;
+  savingsProgress = 0;
+  totalSaved = 0;
+  closestSavingsGoal: SavingsGoal | null = null;
   isExpenseDataLoading = true;
+  isSavingsDataLoading = true;
   expenseDataError = '';
+  savingsDataError = '';
   expenseSummary: ExpenseSummary | null = null;
-  private refreshSubscription?: Subscription;
+  savingsSummary: SavingsSummary | null = null;
+  private expenseRefreshSubscription?: Subscription;
+  private savingsRefreshSubscription?: Subscription;
 
   quickActions = [
     { label: 'Add Expense', icon: 'remove-outline', action: 'add-expense' },
@@ -99,24 +109,31 @@ export class HomePage implements OnInit, OnDestroy {
       'there';
 
     this.currency = preferences?.preferredCurrency || localStorage.getItem('currency') || 'XAF';
-    this.refreshSubscription = this.expensesService.refresh$.subscribe(() => {
+    this.expenseRefreshSubscription = this.expensesService.refresh$.subscribe(() => {
       if (!this.isExpenseDataLoading) {
         void this.loadExpenseData(false);
       }
     });
-    await this.loadExpenseData();
+    this.savingsRefreshSubscription = this.savingsService.refresh$.subscribe(() => {
+      if (!this.isSavingsDataLoading) {
+        void this.loadSavingsData(false);
+      }
+    });
+    await Promise.all([this.loadExpenseData(), this.loadSavingsData()]);
   }
 
   ngOnDestroy(): void {
-    this.refreshSubscription?.unsubscribe();
+    this.expenseRefreshSubscription?.unsubscribe();
+    this.savingsRefreshSubscription?.unsubscribe();
   }
 
   async ionViewWillEnter(): Promise<void> {
-    await this.loadExpenseData(false);
+    await Promise.all([this.loadExpenseData(false), this.loadSavingsData(false)]);
   }
 
+  /** Ready for when a real Budget API exists; unreachable while hasBudget stays false. */
   get budgetUsedPercentage(): number {
-    if (this.monthlyBudget === 0) return 0;
+    if (!this.monthlyBudget) return 0;
     return this.monthlySpent / this.monthlyBudget;
   }
 
@@ -134,7 +151,7 @@ export class HomePage implements OnInit, OnDestroy {
         void this.router.navigateByUrl('/expenses/add');
         break;
       case 'add-savings':
-        void this.router.navigateByUrl('/savings');
+        void this.router.navigateByUrl('/savings/add');
         break;
       case 'view-budget':
         void this.router.navigateByUrl('/budget');
@@ -148,8 +165,8 @@ export class HomePage implements OnInit, OnDestroy {
     return `${this.currency || 'XAF'} ${Number(amount || 0).toLocaleString()}`;
   }
 
-  viewAllExpenses(): void {
-    void this.router.navigateByUrl('/expenses');
+  viewAllTransactions(): void {
+    void this.router.navigateByUrl('/transactions');
   }
 
   formatExpenseDate(date: string): string {
@@ -179,6 +196,33 @@ export class HomePage implements OnInit, OnDestroy {
       this.expenseDataError = 'We could not load your latest expense data.';
     } finally {
       this.isExpenseDataLoading = false;
+    }
+  }
+
+  private async loadSavingsData(showLoading = true): Promise<void> {
+    this.isSavingsDataLoading = showLoading;
+    this.savingsDataError = '';
+
+    try {
+      const [goals, summary] = await Promise.all([
+        this.savingsService.getGoals(),
+        this.savingsService.getSummary(),
+      ]);
+      this.savingsSummary = summary;
+      this.totalSaved = summary.totalSaved;
+      this.closestSavingsGoal = goals
+        .filter((goal) => !goal.isCompleted)
+        .sort((a, b) => Number(a.targetAmount) - Number(a.currentAmount) - (Number(b.targetAmount) - Number(b.currentAmount)))[0] || null;
+      this.savingsProgress = this.closestSavingsGoal
+        ? Math.round(Math.max(0, Math.min(Number(this.closestSavingsGoal.currentAmount) / Number(this.closestSavingsGoal.targetAmount || 1), 1)) * 100)
+        : summary.goalCompletionRate;
+    } catch {
+      this.savingsDataError = 'We could not load your savings data.';
+      this.totalSaved = 0;
+      this.closestSavingsGoal = null;
+      this.savingsProgress = 0;
+    } finally {
+      this.isSavingsDataLoading = false;
     }
   }
 

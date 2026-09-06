@@ -3,7 +3,7 @@ ion-header {
 }
 
 ion-toolbar {
-  --background: rgba(6,20,15,.55);
+  --background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(14px);
   --border-width: 0;
 }
@@ -13,12 +13,7 @@ ion-back-button {
 }
 
 .verify-page {
-  --background: linear-gradient(
-    180deg,
-    #06140F,
-    #0B221C,
-    #081814
-  );
+  --background: var(--app-background);
 
   position: relative;
   overflow: hidden;
@@ -75,7 +70,7 @@ ion-back-button {
 }
 
 .content h1 {
-  color: #fff;
+  color: var(--app-text-heading);
   font-size: 32px;
   font-weight: 700;
   margin-bottom: 20px;
@@ -90,14 +85,14 @@ ion-back-button {
 }
 
 .subtitle {
-  color: rgba(255,255,255,.72);
+  color: var(--app-text-body);
   font-size: 15px;
   line-height: 1.6;
   margin-bottom: 45px;
 }
 
 .countdown {
-  color: rgba(255,255,255,.55);
+  color: var(--app-text-caption);
   margin-bottom: 24px;
   font-size: 14px;
 }

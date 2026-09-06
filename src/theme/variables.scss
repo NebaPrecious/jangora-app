@@ -1,2 +1,99 @@
 // For information on how to create your own theme, please refer to:
 // https://ionicframework.com/docs/theming/
+
+// Jangora design tokens.
+// Bright/light theme: a light neutral gradient background with white cards.
+// These tokens formalize the palette instead of the raw hex values
+// previously copy-pasted per page.
+// See docs/DESIGN_SYSTEM.md for the color roles this maps to.
+:root {
+  /* Brand */
+  --ion-color-primary: #52B788; /* Emerald - dominant interactive accent */
+  --ion-color-primary-rgb: 82, 183, 136;
+  --ion-color-primary-contrast: #FFFFFF;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #40916C; /* Deep Green - darker step, doubles as secondary */
+  --ion-color-primary-tint: #6BC69C;
+
+  --ion-color-secondary: #40916C; /* Deep Green - gradient partner, deep-surface accents */
+  --ion-color-secondary-rgb: 64, 145, 108;
+  --ion-color-secondary-contrast: #FFFFFF;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #386E4B;
+  --ion-color-secondary-tint: #52B788;
+
+  --ion-color-success: #95D5B2; /* distinct lighter mint - positive amounts, kept apart from primary */
+  --ion-color-success-rgb: 149, 213, 178;
+  --ion-color-success-contrast: #06140F;
+  --ion-color-success-contrast-rgb: 6, 20, 15;
+  --ion-color-success-shade: #7CC29C;
+  --ion-color-success-tint: #A9DEC0;
+
+  --ion-color-warning: #F4A261; /* warm amber - caution / approaching-limit states */
+  --ion-color-warning-rgb: 244, 162, 97;
+  --ion-color-warning-contrast: #06140F;
+  --ion-color-warning-contrast-rgb: 6, 20, 15;
+  --ion-color-warning-shade: #D68C52;
+  --ion-color-warning-tint: #F6B27C;
+
+  --ion-color-danger: #FF8A80; /* consolidated single error/destructive red */
+  --ion-color-danger-rgb: 255, 138, 128;
+  --ion-color-danger-contrast: #06140F;
+  --ion-color-danger-contrast-rgb: 6, 20, 15;
+  --ion-color-danger-shade: #E0776E;
+  --ion-color-danger-tint: #FF9C93;
+
+  --ion-color-info: #4A90A4; /* muted teal, deliberately off-green so tips read distinct */
+  --ion-color-info-rgb: 74, 144, 164;
+  --ion-color-info-contrast: #FFFFFF;
+  --ion-color-info-contrast-rgb: 255, 255, 255;
+  --ion-color-info-shade: #417E90;
+  --ion-color-info-tint: #5C9BAD;
+
+  /* Soft Gold accent - not an Ionic palette role, used sparingly for highlights */
+  --app-color-gold: #E9C46A;
+  --app-color-gold-rgb: 233, 196, 106;
+
+  /* Background - bright/light theme */
+  --app-gradient-stop-1: #FFFFFF;
+  --app-gradient-stop-2: #F5F8FA;
+  --app-gradient-stop-3: #EDF4F0;
+  --app-background: linear-gradient(
+    180deg,
+    var(--app-gradient-stop-1) 0%,
+    var(--app-gradient-stop-2) 45%,
+    var(--app-gradient-stop-3) 100%
+  );
+
+  /* Glass surfaces - solid-ish white cards, subtle border/shadow instead of frosted-on-dark */
+  --app-glass-bg: rgba(255, 255, 255, 0.92);
+  --app-glass-bg-strong: #FFFFFF;
+  --app-glass-border: rgba(16, 24, 20, 0.08);
+  --app-glass-nav-bg: rgba(255, 255, 255, 0.92);
+  --app-glass-blur: 20px;
+  --app-focus-ring: 0 0 0 3px rgba(82, 183, 136, 0.18);
+
+  /* Text hierarchy (on bright backgrounds) */
+  --app-text-heading: #1A1A2E;
+  --app-text-body: rgba(26, 26, 46, 0.72);
+  --app-text-caption: rgba(26, 26, 46, 0.52);
+  --app-text-muted: rgba(26, 26, 46, 0.40);
+
+  /* Spacing - 8pt scale */
+  --app-space-xs: 8px;
+  --app-space-sm: 16px;
+  --app-space-md: 24px;
+  --app-space-lg: 32px;
+  --app-space-xl: 40px;
+
+  /* Radius scale */
+  --app-radius-sm: 16px;
+  --app-radius-md: 20px;
+  --app-radius-lg: 24px;
+  --app-radius-xl: 28px;
+  --app-radius-pill: 999px;
+
+  /* Shadow - "elevated without floating", softened for a bright background */
+  --app-shadow-card: 0 12px 28px rgba(16, 24, 20, 0.10);
+  --app-shadow-elevated: 0 16px 34px rgba(16, 24, 20, 0.16);
+}

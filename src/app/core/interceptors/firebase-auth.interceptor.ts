@@ -11,7 +11,8 @@ export const firebaseAuthInterceptor: HttpInterceptorFn = (request, next) => {
 
   const authService = inject(AuthService);
 
-  return from(authService.getIdToken()).pipe(
+  return from(authService.waitForAuthReady()).pipe(
+    switchMap((firebaseUser) => from(firebaseUser ? firebaseUser.getIdToken() : Promise.resolve(null))),
     switchMap((idToken) => {
       if (!idToken) {
         return next(request);

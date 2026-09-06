@@ -1,0 +1,115 @@
+@import '../goal-form/savings-goal-form.page.scss';
+
+.daily-page {
+  --background: var(--app-background);
+  color: var(--app-text-heading);
+}
+
+.daily-page :is(p, span, h1, h2, h3, strong, button, input, textarea, label) {
+  color: var(--app-text-heading);
+}
+
+.daily-container {
+  max-width: 720px;
+  margin: auto;
+  padding: var(--app-space-lg) var(--app-space-sm) 48px;
+  animation: app-fade-up 360ms ease both;
+}
+
+.intro h1 {
+  margin: 0 0 8px;
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.settings-card,
+.streak-card,
+.log-card {
+  padding: 18px;
+  border-radius: var(--app-radius-lg);
+  margin-bottom: var(--app-space-sm);
+  background: var(--app-glass-bg-strong);
+  border: 1px solid var(--app-glass-border);
+  backdrop-filter: blur(var(--app-glass-blur));
+  box-shadow: var(--app-shadow-card);
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.toggle-row h2,
+.log-card h2 {
+  margin: 0 0 6px;
+  font-size: 20px;
+}
+
+.full {
+  width: 100%;
+  margin-top: 14px;
+}
+
+.streak-card {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.streak-card div {
+  min-height: 76px;
+  padding: 12px;
+  border-radius: var(--app-radius-md);
+  background: rgba(3, 17, 12, 0.32);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.streak-card strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 16px;
+}
+
+.streak-value {
+  color: var(--app-color-gold);
+}
+
+.split-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.primary,
+.secondary {
+  min-height: 52px;
+  border-radius: var(--app-radius-md);
+  font-weight: 900;
+  color: var(--app-text-heading);
+}
+
+.primary {
+  border: 0;
+  background: linear-gradient(135deg, var(--ion-color-secondary), var(--ion-color-primary));
+  box-shadow: 0 10px 24px rgba(6, 20, 15, 0.32);
+}
+
+.secondary {
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  background: rgba(255, 255, 255, 0.13);
+}
+
+.skip-message {
+  color: var(--app-text-heading);
+  line-height: 1.5;
+}
+
+@media (max-width: 420px) {
+  .streak-card {
+    grid-template-columns: 1fr;
+  }
+}

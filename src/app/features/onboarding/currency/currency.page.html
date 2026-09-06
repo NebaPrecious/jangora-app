@@ -58,7 +58,7 @@
   <ion-toolbar>
     <ion-button
       expand="block"
-      [disabled]="!selectedCurrency"
+      [disabled]="!selectedCurrency || isNavigating"
       (click)="continue()">
       Continue
     </ion-button>

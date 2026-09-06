@@ -49,7 +49,7 @@ export interface ExpenseFilters {
   dateTo?: string;
   minAmount?: string;
   maxAmount?: string;
-  view?: ExpenseView;
+  view?: ExpenseView | '';
   page?: number;
   limit?: number;
 }

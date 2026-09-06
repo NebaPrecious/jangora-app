@@ -1,0 +1,93 @@
+<ion-header class="savings-header">
+  <ion-toolbar>
+    <ion-buttons slot="start"><ion-back-button defaultHref="/savings" text=""></ion-back-button></ion-buttons>
+    <ion-title>Add Savings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="savings-form-page">
+  <form class="form-container" (ngSubmit)="save()">
+    <div class="form-intro">
+      <p class="eyebrow">Savings</p>
+      <h1>Add money saved</h1>
+      <p>Record a deposit toward a goal or keep it as general savings.</p>
+    </div>
+
+    <div class="state-card loading" *ngIf="isLoading" aria-live="polite" aria-busy="true">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading goals...</p>
+    </div>
+
+    <div class="form-card" *ngIf="!isLoading">
+      <div class="field option-field">
+        <span id="goal-picker-label">Goal</span>
+        <button
+          type="button"
+          class="option-trigger"
+          aria-haspopup="listbox"
+          aria-labelledby="goal-picker-label"
+          [attr.aria-expanded]="expandedOptions === 'goal'"
+          (click)="toggleOptions('goal')">{{ selectedGoalName() }}</button>
+        <div class="option-list" role="listbox" aria-labelledby="goal-picker-label" *ngIf="expandedOptions === 'goal'">
+          <button type="button" role="option" [class.selected]="form.goalId === ''" [attr.aria-selected]="form.goalId === ''" (click)="selectGoal('')">General Savings</button>
+          <button
+            type="button"
+            role="option"
+            *ngFor="let goal of goals"
+            [class.selected]="form.goalId === goal.id"
+            [attr.aria-selected]="form.goalId === goal.id"
+            (click)="selectGoal(goal.id)">
+            {{ goal.name }}
+          </button>
+        </div>
+      </div>
+
+      <label class="field">
+        <span>Amount</span>
+        <input name="amount" type="number" inputmode="decimal" [(ngModel)]="form.amount" placeholder="5000" />
+      </label>
+
+      <div class="field option-field">
+        <span id="add-savings-currency-label">Currency</span>
+        <button
+          type="button"
+          class="option-trigger"
+          aria-haspopup="listbox"
+          aria-labelledby="add-savings-currency-label"
+          [attr.aria-expanded]="expandedOptions === 'currency'"
+          (click)="toggleOptions('currency')">{{ form.currency }}</button>
+        <div class="option-list" role="listbox" aria-labelledby="add-savings-currency-label" *ngIf="expandedOptions === 'currency'">
+          <button
+            type="button"
+            role="option"
+            *ngFor="let currency of currencies"
+            [class.selected]="form.currency === currency"
+            [attr.aria-selected]="form.currency === currency"
+            (click)="selectCurrency(currency)">
+            {{ currency }}
+          </button>
+        </div>
+      </div>
+
+      <label class="field">
+        <span>Date</span>
+        <input name="date" type="date" [(ngModel)]="form.date" />
+      </label>
+
+      <label class="field">
+        <span>Note</span>
+        <textarea name="note" rows="3" [(ngModel)]="form.note" placeholder="Optional note"></textarea>
+      </label>
+    </div>
+
+    <p class="error-message" *ngIf="errorMessage" aria-live="polite">{{ errorMessage }}</p>
+
+    <div class="actions" *ngIf="!isLoading">
+      <button type="button" class="secondary" (click)="cancel()" [disabled]="isSaving">Cancel</button>
+      <button type="submit" class="primary" [disabled]="isSaving">
+        <ion-spinner name="crescent" *ngIf="isSaving" aria-hidden="true"></ion-spinner>
+        <span>{{ isSaving ? 'Saving...' : 'Add Savings' }}</span>
+      </button>
+    </div>
+  </form>
+</ion-content>

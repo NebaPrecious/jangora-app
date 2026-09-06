@@ -1,0 +1,66 @@
+<ion-content [fullscreen]="true" class="transactions-page">
+  <div class="glow glow-one" aria-hidden="true"></div>
+  <div class="glow glow-two" aria-hidden="true"></div>
+
+  <main class="transactions-container">
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">Dashboard</p>
+        <h1>Transactions</h1>
+        <p>Review spending and savings activity in one timeline.</p>
+      </div>
+      <button type="button" class="icon-button" (click)="loadTransactions(false)" [disabled]="isRetrying" aria-label="Refresh transactions">
+        <ion-icon name="refresh-outline" aria-hidden="true"></ion-icon>
+      </button>
+    </header>
+
+    <div class="segmented">
+      <button
+        type="button"
+        *ngFor="let filter of filters"
+        [class.active]="activeFilter === filter"
+        (click)="setFilter(filter)">
+        {{ filterLabel(filter) }}
+      </button>
+    </div>
+
+    <div class="state-card loading" *ngIf="isLoading" aria-live="polite" aria-busy="true">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading your transaction history...</p>
+    </div>
+
+    <div class="state-card error" *ngIf="!isLoading && errorMessage" aria-live="polite">
+      <p>{{ errorMessage }}</p>
+      <button type="button" (click)="loadTransactions(false)">Try again</button>
+    </div>
+
+    <div class="state-card empty" *ngIf="!isLoading && !errorMessage && visibleTransactions.length === 0" aria-live="polite">
+      <ion-icon name="receipt-outline" aria-hidden="true"></ion-icon>
+      <h2>No transactions here yet</h2>
+      <p>Add an expense or savings entry and it will appear in this timeline.</p>
+    </div>
+
+    <ul class="transaction-list" *ngIf="!isLoading && !errorMessage && visibleTransactions.length">
+      <li *ngFor="let transaction of visibleTransactions; let i = index; trackBy: trackByTransactionId">
+        <button
+          type="button"
+          class="transaction-row"
+          [class.savings]="transaction.type === 'savings'"
+          [style.animationDelay.ms]="i * 35"
+          (click)="openTransaction(transaction)">
+          <span class="transaction-icon">
+            <ion-icon [name]="transaction.type === 'expense' ? 'arrow-down-circle-outline' : 'arrow-up-circle-outline'" aria-hidden="true"></ion-icon>
+          </span>
+          <span class="transaction-info">
+            <h2>{{ transaction.categoryOrGoal }}</h2>
+            <p>{{ formatDateTime(transaction.date) }}<span *ngIf="transaction.note"> · {{ transaction.note }}</span></p>
+          </span>
+          <strong>{{ formatMoney(transaction) }}</strong>
+          <ion-icon class="chevron" name="chevron-forward-outline" aria-hidden="true"></ion-icon>
+        </button>
+      </li>
+    </ul>
+  </main>
+
+  <app-dashboard-tabs></app-dashboard-tabs>
+</ion-content>

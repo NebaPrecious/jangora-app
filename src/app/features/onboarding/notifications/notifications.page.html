@@ -63,6 +63,7 @@
   <ion-toolbar>
     <ion-button
       expand="block"
+      [disabled]="isNavigating"
       (click)="continue()">
       Continue
     </ion-button>

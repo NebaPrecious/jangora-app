@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonSpinner, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { AlertController, IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonSpinner, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { AuthService } from '../../../core/auth/auth.service';
 import { UserStateService } from '../../../core/services/user-state.service';
 import { ApiAuthService, BackendUser } from '../../../core/services/api-auth.service';
@@ -16,7 +16,8 @@ import {
   notificationsOutline,
   personOutline,
   settingsOutline,
-  logOutOutline
+  logOutOutline,
+  trashOutline,
 } from 'ionicons/icons';
 
 @Component({
@@ -32,6 +33,7 @@ export class ProfilePage implements OnInit {
   private readonly apiAuthService = inject(ApiAuthService);
   private readonly userStateService = inject(UserStateService);
   private readonly userPreferencesService = inject(UserPreferencesService);
+  private readonly alertController = inject(AlertController);
 
   userName = 'there';
   userEmail = '';
@@ -44,6 +46,7 @@ export class ProfilePage implements OnInit {
   isLoading = true;
   isEditing = false;
   isSaving = false;
+  isDeletingAccount = false;
   message = '';
   errorMessage = '';
 
@@ -60,7 +63,8 @@ export class ProfilePage implements OnInit {
       notificationsOutline,
       personOutline,
       settingsOutline,
-      logOutOutline
+      logOutOutline,
+      trashOutline,
     });
   }
 
@@ -159,10 +163,54 @@ export class ProfilePage implements OnInit {
 
   async handleLogout(): Promise<void> {
     await this.authService.logout();
+    this.clearLocalAccountState();
+    void this.router.navigateByUrl('/login');
+  }
+
+  async confirmDeleteAccount(): Promise<void> {
+    if (this.isDeletingAccount) {
+      return;
+    }
+
+    const alert = await this.alertController.create({
+      header: 'Delete account?',
+      message: 'This permanently deletes your Jangora account and all synced data. This action cannot be undone.',
+      buttons: [
+        { text: 'Cancel', role: 'cancel' },
+        {
+          text: 'Delete Account',
+          role: 'destructive',
+          handler: () => {
+            void this.deleteAccount();
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+
+  private async deleteAccount(): Promise<void> {
+    this.isDeletingAccount = true;
+    this.message = '';
+    this.errorMessage = '';
+
+    try {
+      await this.apiAuthService.deleteCurrentUser();
+      await this.authService.logout().catch(() => undefined);
+      this.clearLocalAccountState();
+      await this.router.navigateByUrl('/login', { replaceUrl: true });
+    } catch (error) {
+      this.errorMessage = error instanceof Error ? error.message : 'We could not delete your account. Please try again.';
+    } finally {
+      this.isDeletingAccount = false;
+    }
+  }
+
+  private clearLocalAccountState(): void {
     this.userStateService.clearUser();
     this.userPreferencesService.clearPreferences();
     localStorage.removeItem('registeredEmail');
-    void this.router.navigateByUrl('/login');
   }
 
 }

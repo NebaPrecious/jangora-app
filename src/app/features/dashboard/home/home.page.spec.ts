@@ -3,7 +3,11 @@ import { provideHttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Subject } from 'rxjs';
+import { AuthService } from '../../../core/auth/auth.service';
 import { ExpensesService } from '../../../core/services/expenses.service';
+import { SavingsService } from '../../../core/services/savings.service';
+import { UserPreferencesService } from '../../../core/services/user-preferences.service';
+import { UserStateService } from '../../../core/services/user-state.service';
 import { HomePage } from './home.page';
 
 describe('HomePage', () => {
@@ -36,11 +40,54 @@ describe('HomePage', () => {
       monthOverMonthChange: 1500,
     }),
   };
+  const savingsRefreshSubject = new Subject<number>();
+  const savingsService = {
+    refresh$: savingsRefreshSubject.asObservable(),
+    getGoals: jasmine.createSpy('getGoals').and.resolveTo([
+      {
+        id: 'goal-id',
+        userId: 'user-id',
+        name: 'Emergency Fund',
+        targetAmount: '100000.00',
+        currentAmount: '25000.00',
+        currency: 'XAF',
+        targetDate: null,
+        isCompleted: false,
+        createdAt: '2026-07-01T00:00:00.000Z',
+        updatedAt: '2026-07-21T08:00:00.000Z',
+      },
+    ]),
+    getSummary: jasmine.createSpy('getSummary').and.resolveTo({
+      totalSaved: 25000,
+      activeGoals: 1,
+      completedGoals: 0,
+      goalCompletionRate: 25,
+      recentSavings: [],
+      savingsOverTime: [],
+      plan: { currency: 'XAF', isEnabled: false, currentStreak: 0, longestStreak: 0 },
+    }),
+  };
+  const authService = {
+    getCurrentUser: jasmine.createSpy('getCurrentUser').and.returnValue({ email: 'test@example.com', displayName: null }),
+  };
+  const userStateService = {
+    getUser: jasmine.createSpy('getUser').and.returnValue({ firstName: 'Test', lastName: 'User', displayName: 'Test User' }),
+  };
+  const userPreferencesService = {
+    getPreferences: jasmine.createSpy('getPreferences').and.returnValue({ preferredCurrency: 'XAF' }),
+  };
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [HomePage, RouterTestingModule],
-      providers: [provideHttpClient(), { provide: ExpensesService, useValue: expensesService }],
+      providers: [
+        provideHttpClient(),
+        { provide: AuthService, useValue: authService },
+        { provide: ExpensesService, useValue: expensesService },
+        { provide: SavingsService, useValue: savingsService },
+        { provide: UserPreferencesService, useValue: userPreferencesService },
+        { provide: UserStateService, useValue: userStateService },
+      ],
     });
 
     fixture = TestBed.createComponent(HomePage);
@@ -79,5 +126,14 @@ describe('HomePage', () => {
   it('should keep total balance at zero until a real balance source exists', () => {
     expect(component.totalBalance).toBe(0);
     expect(component.formatMoney(component.totalBalance)).toBe('XAF 0');
+  });
+
+  it('should open the combined transaction history from View all', () => {
+    const router = TestBed.inject(Router);
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+
+    component.viewAllTransactions();
+
+    expect(navigateSpy).toHaveBeenCalledWith('/transactions');
   });
 });

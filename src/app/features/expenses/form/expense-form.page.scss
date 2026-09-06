@@ -1,3 +1,5 @@
+@use '../../../../theme/app-surfaces' as surfaces;
+
 .jangora-header {
   --background: transparent;
 }
@@ -10,28 +12,24 @@
 }
 
 .jangora-header ion-back-button {
-  --color: #52b788;
+  --color: var(--ion-color-primary);
 }
 
 .expense-form-page {
-  --background: linear-gradient(180deg, #06140f 0%, #081c15 45%, #0b2d22 100%);
-  color: #ffffff;
+  --background: var(--app-background);
+  color: var(--app-text-heading);
   position: relative;
   overflow: hidden;
 }
 
 .glow {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(110px);
-  opacity: 0.22;
-  pointer-events: none;
+  @include surfaces.app-glow-blob;
 }
 
 .glow-one {
   width: 240px;
   height: 240px;
-  background: #52b788;
+  background: var(--ion-color-primary);
   top: -100px;
   right: -90px;
 }
@@ -39,7 +37,7 @@
 .glow-two {
   width: 210px;
   height: 210px;
-  background: #40916c;
+  background: var(--ion-color-secondary);
   bottom: 80px;
   left: -100px;
 }
@@ -47,23 +45,23 @@
 .form-container {
   position: relative;
   z-index: 2;
-  padding: 32px 22px 56px;
+  padding: var(--app-space-lg) var(--app-space-sm) 56px;
   max-width: 720px;
   margin: auto;
-  animation: fade-up 340ms ease both;
+  animation: app-fade-up 340ms ease both;
 }
 
 .form-heading p {
   margin: 0 0 8px;
-  color: rgba(255, 255, 255, 0.64);
+  color: var(--app-text-body);
   font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
 }
 
 .form-heading h1 {
-  margin: 0 0 24px;
-  color: #ffffff;
+  margin: 0 0 var(--app-space-md);
+  color: var(--app-text-heading);
   font-size: 30px;
   font-weight: 900;
 }
@@ -77,11 +75,11 @@ form {
 .field,
 .toggle-row,
 .state-card {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 22px;
-  backdrop-filter: blur(18px);
-  animation: card-enter 220ms ease-out both;
+  background: var(--app-glass-bg);
+  border: 1px solid var(--app-glass-border);
+  border-radius: var(--app-radius-lg);
+  backdrop-filter: blur(var(--app-glass-blur));
+  animation: app-card-enter 220ms ease-out both;
 }
 
 .field {
@@ -93,15 +91,15 @@ form {
 
 .field span,
 .toggle-row span {
-  color: rgba(255, 255, 255, 0.68);
+  color: var(--app-text-body);
   font-size: 13px;
   font-weight: 800;
 }
 
 .amount-field {
   background:
-    radial-gradient(circle at top right, rgba(233, 196, 106, 0.16), transparent 34%),
-    linear-gradient(135deg, rgba(82, 183, 136, 0.18), rgba(255, 255, 255, 0.07));
+    radial-gradient(circle at top right, rgba(var(--app-color-gold-rgb), 0.16), transparent 34%),
+    linear-gradient(135deg, rgba(var(--ion-color-primary-rgb), 0.18), rgba(255, 255, 255, 0.07));
 }
 
 .amount-field div {
@@ -116,7 +114,7 @@ form {
 }
 
 .amount-field ion-icon {
-  color: #52b788;
+  color: var(--ion-color-primary);
   font-size: 26px;
 }
 
@@ -126,13 +124,13 @@ textarea {
   border: 0;
   outline: 0;
   background: transparent;
-  color: #ffffff;
+  color: var(--app-text-heading);
   font: inherit;
 }
 
 input::placeholder,
 textarea::placeholder {
-  color: rgba(255, 255, 255, 0.48);
+  color: var(--app-text-muted);
 }
 
 textarea {
@@ -149,7 +147,7 @@ textarea {
   min-height: 38px;
   border: 0;
   background: transparent;
-  color: #ffffff;
+  color: var(--app-text-heading);
   text-align: left;
   font: inherit;
   font-size: 17px;
@@ -162,12 +160,12 @@ textarea {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
   margin-top: 8px;
-  animation: selector-open 180ms ease-out both;
+  animation: app-selector-open 180ms ease-out both;
 }
 
 .option-list button {
   min-height: 44px;
-  border-radius: 15px;
+  border-radius: var(--app-radius-sm);
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.07);
   color: rgba(255, 255, 255, 0.82);
@@ -176,9 +174,9 @@ textarea {
 }
 
 .option-list button.selected {
-  border-color: #52b788;
-  background: rgba(82, 183, 136, 0.2);
-  color: #ffffff;
+  border-color: var(--ion-color-primary);
+  background: rgba(var(--ion-color-primary-rgb), 0.2);
+  color: var(--app-text-heading);
 }
 
 .toggle-row {
@@ -192,19 +190,19 @@ textarea {
 
 .toggle-row p {
   margin: 5px 0 0;
-  color: rgba(255, 255, 255, 0.58);
+  color: var(--app-text-caption);
   font-size: 13px;
 }
 
 .toggle-row input {
   width: 24px;
   height: 24px;
-  accent-color: #52b788;
+  accent-color: var(--ion-color-primary);
 }
 
 .error-message {
   margin: 0;
-  color: #ff8a80;
+  color: var(--ion-color-danger);
   font-size: 14px;
   font-weight: 700;
 }
@@ -219,16 +217,16 @@ textarea {
 .primary-button,
 .secondary-button {
   min-height: 56px;
-  border-radius: 18px;
+  border-radius: var(--app-radius-md);
   font-weight: 900;
   transition: transform 160ms ease, opacity 160ms ease;
 }
 
 .primary-button {
   border: none;
-  background: linear-gradient(90deg, #40916c, #52b788);
-  color: #ffffff;
-  box-shadow: 0 10px 30px rgba(82, 183, 136, 0.28);
+  background: linear-gradient(90deg, var(--ion-color-secondary), var(--ion-color-primary));
+  color: var(--app-text-heading);
+  box-shadow: 0 10px 30px rgba(var(--ion-color-primary-rgb), 0.28);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -247,9 +245,9 @@ textarea {
 }
 
 .state-card {
-  padding: 26px;
+  padding: var(--app-space-md);
   text-align: center;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--app-text-body);
 }
 
 .primary-button:active,
@@ -263,38 +261,5 @@ textarea {
 @media (min-width: 620px) {
   .field-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes card-enter {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes selector-open {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }

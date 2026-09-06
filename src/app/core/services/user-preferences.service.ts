@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, firstValueFrom } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, timeout } from 'rxjs';
 import { API_BASE_URL } from '../api/api.config';
+import { retryTransient, toFriendlyNetworkError } from '../errors/network-error.util';
 
 export interface UserPreferencesPayload {
   primaryGoals: string[];
@@ -20,6 +21,7 @@ export interface BackendUserPreferences extends UserPreferencesPayload {
 })
 export class UserPreferencesService {
   private readonly apiBaseUrl = API_BASE_URL;
+  private readonly requestTimeoutMs = 12000;
   private readonly preferencesSubject = new BehaviorSubject<BackendUserPreferences | null>(null);
   readonly preferences$ = this.preferencesSubject.asObservable();
 
@@ -30,20 +32,34 @@ export class UserPreferencesService {
   }
 
   async getMyPreferences(): Promise<BackendUserPreferences> {
-    const preferences = await firstValueFrom(
-      this.http.get<BackendUserPreferences>(`${this.apiBaseUrl}/user-preferences/me`),
-    );
-    this.setPreferences(preferences);
-    return preferences;
+    try {
+      const preferences = await retryTransient(() =>
+        firstValueFrom(
+          this.http.get<BackendUserPreferences>(`${this.apiBaseUrl}/user-preferences/me`).pipe(timeout(this.requestTimeoutMs)),
+        ),
+      );
+      this.setPreferences(preferences);
+      return preferences;
+    } catch (error) {
+      throw toFriendlyNetworkError(error, 'We could not load your preferences. Please try again.');
+    }
   }
 
   async saveMyPreferences(payload: UserPreferencesPayload): Promise<BackendUserPreferences> {
-    const preferences = await firstValueFrom(
-      this.http.put<BackendUserPreferences>(`${this.apiBaseUrl}/user-preferences/me`, payload),
-    );
-    this.setPreferences(preferences);
-    this.preserveOfflineDisplayValues(preferences);
-    return preferences;
+    try {
+      const preferences = await retryTransient(() =>
+        firstValueFrom(
+          this.http
+            .put<BackendUserPreferences>(`${this.apiBaseUrl}/user-preferences/me`, payload)
+            .pipe(timeout(this.requestTimeoutMs)),
+        ),
+      );
+      this.setPreferences(preferences);
+      this.preserveOfflineDisplayValues(preferences);
+      return preferences;
+    } catch (error) {
+      throw toFriendlyNetworkError(error, 'We could not save your preferences. Please try again.');
+    }
   }
 
   async ensurePreferencesForAuthenticatedUser(): Promise<BackendUserPreferences> {

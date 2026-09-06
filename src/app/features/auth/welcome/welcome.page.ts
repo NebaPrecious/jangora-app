@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { NavigationFocusService } from '../../../core/services/navigation-focus.service';
 
 import {
   IonContent,
@@ -19,13 +20,18 @@ import {
   ]
 })
 export class WelcomePage {
+  isNavigating = false;
 
   constructor(
-    private router: Router
+    private router: Router,
+    private readonly navigationFocusService: NavigationFocusService,
   ) {}
 
-  goToGoal() {
-    this.router.navigateByUrl('/goal');
+  async goToGoal() {
+    if (this.isNavigating) return;
+    this.isNavigating = true;
+    this.navigationFocusService.blurActiveElement();
+    await this.router.navigateByUrl('/goal');
   }
 
 }

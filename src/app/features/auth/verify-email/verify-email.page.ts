@@ -5,6 +5,7 @@ import { AuthService } from '../../../core/auth/auth.service';
 import { ApiAuthService } from '../../../core/services/api-auth.service';
 import { UserStateService } from '../../../core/services/user-state.service';
 import { UserPreferencesService } from '../../../core/services/user-preferences.service';
+import { NavigationFocusService } from '../../../core/services/navigation-focus.service';
 
 import {
   IonContent,
@@ -51,6 +52,7 @@ export class VerifyEmailPage implements OnInit, OnDestroy {
     private readonly apiAuthService: ApiAuthService,
     private readonly userStateService: UserStateService,
     private readonly userPreferencesService: UserPreferencesService,
+    private readonly navigationFocusService: NavigationFocusService,
   ) {}
 
   ngOnInit(): void {
@@ -75,9 +77,12 @@ export class VerifyEmailPage implements OnInit, OnDestroy {
   }
 
   async verifyEmail() {
+    if (this.isVerifying) return;
+
     this.isVerifying = true;
     this.errorMessage = '';
     this.message = '';
+    this.navigationFocusService.blurActiveElement();
 
     try {
       const verified = await this.authService.checkEmailVerified();
@@ -85,14 +90,9 @@ export class VerifyEmailPage implements OnInit, OnDestroy {
       if (verified) {
         const backendUser = await this.apiAuthService.syncFirebaseUser();
         this.userStateService.setUser(backendUser);
+        await this.userPreferencesService.saveCompletedOnboardingFromLocalStorage();
 
-        try {
-          await this.userPreferencesService.saveCompletedOnboardingFromLocalStorage();
-        } catch (preferencesError: unknown) {
-          console.warn('Preference sync warning after verification.');
-        }
-
-        this.router.navigateByUrl('/dashboard');
+        await this.router.navigateByUrl('/dashboard');
       } else {
         this.errorMessage = 'Your email is not verified yet. Please open the verification email and try again.';
       }
